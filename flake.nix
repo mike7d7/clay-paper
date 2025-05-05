@@ -35,12 +35,10 @@
               pkg-config
             ];
             buildInputs = with pkgs; [
-              sdl3
-              sdl3-ttf
-              sdl3-image
+              raylib
             ];
             buildPhase = ''
-              clang main.c -o clay-paper `pkg-config --libs --cflags sdl3 sdl3-ttf sdl3-image`
+              clang main.c -o clay-paper `pkg-config --libs --cflags raylib` -lm
             '';
             installPhase = ''
               mkdir -p $out/bin
@@ -66,9 +64,7 @@
                     cmake
                     cppcheck
                     pkg-config
-                    sdl3
-                    sdl3-ttf
-                    sdl3-image
+                    raylib
                   ]
                   ++ (if system == "aarch64-darwin" then [ ] else [ gdb ]);
               };
