@@ -38,7 +38,7 @@
               raylib
             ];
             buildPhase = ''
-              clang main.c -o clay-paper `pkg-config --libs --cflags raylib` -lm
+              clang clay-paper.c -o clay-paper `pkg-config --libs --cflags raylib` -lm
             '';
             installPhase = ''
               mkdir -p $out/bin
