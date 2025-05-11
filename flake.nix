@@ -66,7 +66,7 @@
                     pkg-config
                     raylib
                   ]
-                  ++ (if system == "aarch64-darwin" then [ ] else [ gdb ]);
+                  ++ (if system == "aarch64-darwin" then [ ] else [ lldb ]);
               };
         }
       );
