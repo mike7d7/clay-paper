@@ -45,6 +45,25 @@
               cp clay-paper $out/bin/
             '';
           };
+          debug = pkgs.clangStdenv.mkDerivation {
+            pname = "clay-paper-debug";
+            version = "0.0.1";
+            src = self;
+            nativeBuildInputs = with pkgs; [
+              pkg-config
+            ];
+            buildInputs = with pkgs; [
+              raylib
+            ];
+            dontStrip = true;
+            buildPhase = ''
+              clang clay-paper.c -o clay-paper-debug `pkg-config --libs --cflags raylib` -lm -glldb -O0
+            '';
+            installPhase = ''
+              mkdir -p $out/bin
+              cp clay-paper-debug $out/bin/
+            '';
+          };
         }
       );
       devShells = forEachSupportedSystem (
