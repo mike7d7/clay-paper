@@ -1,4 +1,3 @@
-#include <math.h>
 #include <stdint.h>
 #define CLAY_IMPLEMENTATION
 #include "clay.h"
