@@ -25,7 +25,7 @@ int main(void) {
       (Clay_ErrorHandler){HandleClayErrors});
   Font fonts[1];
   fonts[0] = LoadFontEx(
-      "/nix/store/6h2j3ny1ifyjmk1ww1fb0x60rdy9ibib-liberation-fonts-2.1.5/"
+      "/nix/store/z52y6yr69xa38ynsf4dssm5phvcb9dvp-liberation-fonts-2.1.5/"
       "share/fonts/"
       "truetype/LiberationMono-Regular.ttf",
       48, 0, 400);
