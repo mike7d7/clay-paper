@@ -57,7 +57,7 @@
             ];
             dontStrip = true;
             buildPhase = ''
-              clang clay-paper.c -o clay-paper-debug `pkg-config --libs --cflags raylib` -lm -glldb -O0
+              clang clay-paper.c -o clay-paper-debug `pkg-config --libs --cflags raylib` -lm -glldb -O0 -fsanitize=address
             '';
             installPhase = ''
               mkdir -p $out/bin
