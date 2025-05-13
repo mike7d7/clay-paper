@@ -12,7 +12,6 @@ Clay_Color COLOR_TEXTEDIT_HOVERED = {40, 52, 64, 255};
 Clay_Color COLOR_TEXTEDIT_NORMAL = {30, 41, 53, 255};
 #define TOP_WIDTH 400
 
-
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {16, 16, 8, 8}},
@@ -61,15 +60,6 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
   }
 }
 
-// Size of 'empty_buffer' is the maxLength of the string - 1 (space for null
-// terminator).
-char empty_buffer[11];
-TextEditData default_data = (TextEditData){.hintText = CLAY_STRING("Search"),
-                                           .textToEdit = empty_buffer,
-                                           .isPassword = false,
-                                           .maxLength = sizeof(empty_buffer),
-                                           .disable = false};
-
 void HeaderBar() {
   CLAY({
       .id = CLAY_ID("header"),
@@ -83,7 +73,7 @@ void HeaderBar() {
     HorizontalSpacer();
     TextEditComponent(CLAY_STRING("search"), &default_data);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Clear"));
+    HeaderButton(CLAY_STRING("Clear"), CLAY_STRING("Clear"), HandleClearButton);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Name"), CLAY_STRING("Name"), HandleExitButton);
     HorizontalSpacer();
