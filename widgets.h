@@ -69,7 +69,8 @@ void HeaderBar() {
       .backgroundColor = COLOR_ELEMENT_BACKGROUND,
   }) {
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Folder"));
+    HeaderButton(CLAY_STRING("Folder"), CLAY_STRING("Folder"),
+                 HandleExitButton);
     HorizontalSpacer();
     TextEditComponent(CLAY_STRING("search"), &default_data);
     HorizontalSpacer();
@@ -77,13 +78,16 @@ void HeaderBar() {
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Name"), CLAY_STRING("Name"), HandleExitButton);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Refresh"));
+    HeaderButton(CLAY_STRING("Refresh"), CLAY_STRING("Refresh"),
+                 HandleExitButton);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Random"));
+    HeaderButton(CLAY_STRING("Random"), CLAY_STRING("Random"),
+                 HandleExitButton);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Options"));
+    HeaderButton(CLAY_STRING("Options"), CLAY_STRING("Options"),
+                 HandleExitButton);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Exit"));
+    HeaderButton(CLAY_STRING("Exit"), CLAY_STRING("Exit"), HandleExitButton);
     HorizontalSpacer();
   };
 }
