@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 
+bool should_exit = false;
 void HandleTextEditInteraction(Clay_ElementId elementId,
                                Clay_PointerData pointerInfo,
                                intptr_t userData) {
@@ -19,6 +20,12 @@ void HandleTextEditInteraction(Clay_ElementId elementId,
       data->textToEdit[len] = (char)key;
       data->textToEdit[len + 1] = '\0';
     }
+  }
+}
+
+void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data) {
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    should_exit = true;
   }
 }
 

@@ -13,10 +13,12 @@ Clay_Color COLOR_TEXTEDIT_NORMAL = {30, 41, 53, 255};
 #define TOP_WIDTH 400
 
 
-void HeaderButton(Clay_String text) {
-  CLAY({.layout = {.padding = {16, 16, 8, 8}},
+void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
+  CLAY({.id = CLAY_SID(id),
+        .layout = {.padding = {16, 16, 8, 8}},
         .backgroundColor = {140, 140, 140, 255},
         .cornerRadius = CLAY_CORNER_RADIUS(5)}) {
+    Clay_OnHover(on_click_function, 0);
     CLAY_TEXT(text, CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
                                       .fontSize = 16,
                                       .textColor = {255, 255, 255, 255}}));
@@ -83,7 +85,7 @@ void HeaderBar() {
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Clear"));
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Name"));
+    HeaderButton(CLAY_STRING("Name"), CLAY_STRING("Name"), HandleExitButton);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Refresh"));
     HorizontalSpacer();

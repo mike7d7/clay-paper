@@ -32,7 +32,7 @@ int main(void) {
   SetTextureFilter(fonts[0].texture, TEXTURE_FILTER_BILINEAR);
   Clay_SetMeasureTextFunction(Raylib_MeasureText, fonts);
 
-  while (!WindowShouldClose()) {
+  while (!WindowShouldClose() && !should_exit) {
     // Run once per frame
     Clay_SetLayoutDimensions((Clay_Dimensions){.width = GetScreenWidth(),
                                                .height = GetScreenHeight()});
