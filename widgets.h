@@ -1,4 +1,5 @@
 #include "clay.h"
+#include "widget_functions.h"
 #include <raylib.h>
 #include <stdint.h>
 #include <string.h>
@@ -11,13 +12,6 @@ Clay_Color COLOR_TEXTEDIT_HOVERED = {40, 52, 64, 255};
 Clay_Color COLOR_TEXTEDIT_NORMAL = {30, 41, 53, 255};
 #define TOP_WIDTH 400
 
-typedef struct {
-  Clay_String hintText;
-  char *textToEdit;
-  bool isPassword;
-  int maxLength;
-  bool disable;
-} TextEditData;
 
 void HeaderButton(Clay_String text) {
   CLAY({.layout = {.padding = {16, 16, 8, 8}},
@@ -33,24 +27,6 @@ void HorizontalSpacer() {
   CLAY({.layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)}}});
 }
 
-// not a widget
-void HandleTextEditInteraction(Clay_ElementId elementId,
-                               Clay_PointerData pointerInfo,
-                               intptr_t userData) {
-  TextEditData *data = (TextEditData *)userData;
-  if (data->disable) {
-    return;
-  }
-
-  uint32_t key = GetCharPressed();
-  if (key != 0) {
-    uint32_t len = strlen(data->textToEdit);
-    if (len < data->maxLength - 1) {
-      data->textToEdit[len] = (char)key;
-      data->textToEdit[len + 1] = '\0';
-    }
-  }
-}
 void TextEditComponent(Clay_String id, TextEditData *data) {
   Clay_String text = (Clay_String){.length = strlen(data->textToEdit),
                                    .chars = data->textToEdit};
