@@ -1,6 +1,6 @@
 #include "widget_functions.h"
 #include "clay.h"
-#include <raylib.h>
+#include <SDL3/SDL.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -20,7 +20,7 @@ void HandleTextEditInteraction(Clay_ElementId elementId,
     return;
   }
 
-  uint32_t key = GetCharPressed();
+  uint32_t key = 32;
   if (key != 0) {
     uint32_t len = strlen(data->textToEdit);
     if (len < data->maxLength - 1) {
