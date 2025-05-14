@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <string.h>
 
-bool should_exit = false;
 char empty_buffer[11];
 TextEditData default_data = (TextEditData){.hintText = CLAY_STRING("Search"),
                                            .textToEdit = empty_buffer,
@@ -32,7 +31,6 @@ void HandleTextEditInteraction(Clay_ElementId elementId,
 
 void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-    should_exit = true;
   }
 }
 
