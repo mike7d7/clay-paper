@@ -13,10 +13,6 @@
 
 static const Uint32 FONT_ID = 0;
 
-static const Clay_Color COLOR_ORANGE = (Clay_Color){225, 138, 50, 255};
-static const Clay_Color COLOR_BLUE = (Clay_Color){111, 173, 162, 255};
-static const Clay_Color COLOR_LIGHT = (Clay_Color){224, 215, 210, 255};
-
 typedef struct app_state {
   SDL_Window *window;
   Clay_SDL3RendererData rendererData;
