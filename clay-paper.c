@@ -145,6 +145,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     Clay_SetPointerState((Clay_Vector2){event->button.x, event->button.y},
                          event->button.button == SDL_BUTTON_LEFT);
     break;
+  case SDL_EVENT_MOUSE_BUTTON_UP:
+    Clay_SetPointerState((Clay_Vector2){event->button.x, event->button.y},
+                         event->button.button == SDL_BUTTON_LEFT);
+    break;
   case SDL_EVENT_MOUSE_WHEEL:
     Clay_UpdateScrollContainers(
         true, (Clay_Vector2){event->wheel.x, event->wheel.y}, 0.01f);
