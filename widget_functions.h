@@ -1,7 +1,5 @@
 #include "clay.h"
 
-extern bool should_exit;
-
 typedef struct {
   Clay_String hintText;
   char *textToEdit;
