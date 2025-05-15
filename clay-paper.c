@@ -18,8 +18,6 @@ typedef struct app_state {
   Clay_SDL3RendererData rendererData;
 } AppState;
 
-SDL_Texture *sample_image;
-
 static inline Clay_Dimensions SDL_MeasureText(Clay_StringSlice text,
                                               Clay_TextElementConfig *config,
                                               void *userData) {
@@ -181,10 +179,6 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
   }
 
   AppState *state = appstate;
-
-  if (sample_image) {
-    SDL_DestroyTexture(sample_image);
-  }
 
   if (state) {
     if (state->rendererData.renderer)
