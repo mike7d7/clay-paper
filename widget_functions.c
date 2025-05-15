@@ -1,4 +1,5 @@
 #include "widget_functions.h"
+#include "SDL3/SDL_events.h"
 #include "clay.h"
 #include <SDL3/SDL.h>
 #include <stdint.h>
@@ -31,6 +32,9 @@ void HandleTextEditInteraction(Clay_ElementId elementId,
 
 void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    SDL_Event quit_event;
+    quit_event.type = SDL_EVENT_QUIT;
+    SDL_PushEvent(&quit_event);
   }
 }
 
