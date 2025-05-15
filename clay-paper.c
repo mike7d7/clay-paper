@@ -19,7 +19,6 @@ typedef struct app_state {
 } AppState;
 
 SDL_Texture *sample_image;
-bool show_demo = true;
 
 static inline Clay_Dimensions SDL_MeasureText(Clay_StringSlice text,
                                               Clay_TextElementConfig *config,
@@ -135,11 +134,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   switch (event->type) {
   case SDL_EVENT_QUIT:
     ret_val = SDL_APP_SUCCESS;
-    break;
-  case SDL_EVENT_KEY_UP:
-    if (event->key.scancode == SDL_SCANCODE_SPACE) {
-      show_demo = !show_demo;
-    }
     break;
   case SDL_EVENT_WINDOW_RESIZED:
     Clay_SetLayoutDimensions((Clay_Dimensions){(float)event->window.data1,
