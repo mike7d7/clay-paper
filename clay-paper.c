@@ -127,6 +127,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
 }
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
+  AppState *state = appstate;
   SDL_AppResult ret_val = SDL_APP_CONTINUE;
 
   switch (event->type) {
@@ -152,6 +153,29 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   case SDL_EVENT_MOUSE_WHEEL:
     Clay_UpdateScrollContainers(
         true, (Clay_Vector2){event->wheel.x, event->wheel.y}, 0.01f);
+    break;
+  case SDL_EVENT_USER:
+    SDL_StartTextInput(state->window);
+    SDL_SetTextInputArea(state->window, event->user.data1, 0);
+    free(event->user.data1);
+    break;
+  case SDL_EVENT_TEXT_INPUT:
+    strcat(empty_buffer, event->text.text);
+    break;
+  case SDL_EVENT_KEY_DOWN:
+    if (event->key.key == SDLK_ESCAPE || event->key.key == SDLK_RETURN) {
+      SDL_StopTextInput(state->window);
+    }
+    break;
+  case SDL_EVENT_TEXT_EDITING:
+    /*
+    Update the composition text.
+    Update the cursor position.
+    Update the selection length (if any).
+    */
+    // composition = event->edit.text;
+    // cursor = event->edit.start;
+    // selection_len = event->edit.length;
     break;
   default:
     break;
