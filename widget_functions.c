@@ -1,11 +1,12 @@
 #include "widget_functions.h"
 #include "clay.h"
-#include <raylib.h>
+#include <SDL3/SDL.h>
 #include <stdint.h>
-#include <string.h>
 
-bool should_exit = false;
-char empty_buffer[11];
+char empty_buffer[1024];
+bool text_input_initialized = false;
+Uint32 myEventType;
+
 TextEditData default_data = (TextEditData){.hintText = CLAY_STRING("Search"),
                                            .textToEdit = empty_buffer,
                                            .isPassword = false,
@@ -19,20 +20,33 @@ void HandleTextEditInteraction(Clay_ElementId elementId,
   if (data->disable) {
     return;
   }
-
-  uint32_t key = GetCharPressed();
-  if (key != 0) {
-    uint32_t len = strlen(data->textToEdit);
-    if (len < data->maxLength - 1) {
-      data->textToEdit[len] = (char)key;
-      data->textToEdit[len + 1] = '\0';
-    }
+  if (!text_input_initialized) {
+    myEventType = SDL_RegisterEvents(1);
+    text_input_initialized = !text_input_initialized;
+  }
+  Clay_ElementData element_data = Clay_GetElementData(elementId);
+  SDL_Rect *element_area = malloc(sizeof(SDL_Rect));
+  *element_area = (SDL_Rect){
+      .x = element_data.boundingBox.x,
+      .y = element_data.boundingBox.y,
+      .w = element_data.boundingBox.width,
+      .h = element_data.boundingBox.height,
+  };
+  if (myEventType != 0) {
+    SDL_Event start_text_edit;
+    SDL_zero(start_text_edit);
+    start_text_edit.type = myEventType;
+    start_text_edit.user.code = 1;
+    start_text_edit.user.data1 = element_area;
+    SDL_PushEvent(&start_text_edit);
   }
 }
 
 void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-    should_exit = true;
+    SDL_Event quit_event;
+    quit_event.type = SDL_EVENT_QUIT;
+    SDL_PushEvent(&quit_event);
   }
 }
 

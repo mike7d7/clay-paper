@@ -1,6 +1,6 @@
 #include "clay.h"
 #include "widget_functions.h"
-#include <raylib.h>
+#include <SDL3/SDL.h>
 #include <stdint.h>
 #include <string.h>
 
