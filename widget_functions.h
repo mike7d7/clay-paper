@@ -14,6 +14,6 @@ extern char empty_buffer[];
 extern TextEditData default_data;
 
 void HandleTextEditInteraction(Clay_ElementId elementId,
-                               Clay_PointerData pointerInfo, intptr_t userData);
+                               Clay_PointerData pointer_data, intptr_t userData);
 void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleClearButton(Clay_ElementId id, Clay_PointerData pointer_data);

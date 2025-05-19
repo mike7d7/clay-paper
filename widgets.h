@@ -49,7 +49,7 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
         .backgroundColor =
             Clay_Hovered() ? COLOR_TEXTEDIT_HOVERED : COLOR_TEXTEDIT_NORMAL,
         .cornerRadius = {.topLeft = 8}}) {
-    Clay_OnHover(HandleTextEditInteraction, (intptr_t)data);
+    Clay_OnHover(HandleTextEditInteraction, 0);
     CLAY_TEXT(
         text.length > 0 ? text : data->hintText,
         CLAY_TEXT_CONFIG({.textColor = text.length > 0
