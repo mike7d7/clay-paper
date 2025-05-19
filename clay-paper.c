@@ -12,6 +12,7 @@
 #include "widgets.h"
 
 static const Uint32 FONT_ID = 0;
+bool editing_text = false;
 
 typedef struct app_state {
   SDL_Window *window;
@@ -157,14 +158,22 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   case SDL_EVENT_USER:
     SDL_StartTextInput(state->window);
     SDL_SetTextInputArea(state->window, event->user.data1, 0);
+    editing_text = true;
     free(event->user.data1);
     break;
   case SDL_EVENT_TEXT_INPUT:
     strcat(empty_buffer, event->text.text);
     break;
   case SDL_EVENT_KEY_DOWN:
-    if (event->key.key == SDLK_ESCAPE || event->key.key == SDLK_RETURN) {
-      SDL_StopTextInput(state->window);
+    if (editing_text) {
+      if (event->key.key == SDLK_ESCAPE || event->key.key == SDLK_RETURN) {
+        SDL_StopTextInput(state->window);
+        editing_text = false;
+      }
+    } else {
+      if (event->key.key == SDLK_ESCAPE) {
+        ret_val = SDL_APP_SUCCESS;
+      }
     }
     break;
   case SDL_EVENT_TEXT_EDITING:
