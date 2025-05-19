@@ -6,6 +6,7 @@
 char empty_buffer[1024];
 bool text_input_initialized = false;
 Uint32 myEventType;
+SDL_Event start_text_edit;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
@@ -13,14 +14,16 @@ TextEditData default_data = (TextEditData){
     .isPassword = false,
     .maxLength = sizeof(empty_buffer),
 };
+void InitializeCustomEvents() {
+  myEventType = SDL_RegisterEvents(1);
+  SDL_zero(start_text_edit);
+  start_text_edit.type = myEventType;
+  start_text_edit.user.code = 1;
+}
 
 void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
                                intptr_t userData) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-    if (!text_input_initialized) {
-      myEventType = SDL_RegisterEvents(1);
-      text_input_initialized = !text_input_initialized;
-    }
     Clay_ElementData element_data = Clay_GetElementData(id);
     SDL_Rect *element_area = malloc(sizeof(SDL_Rect));
     *element_area = (SDL_Rect){
@@ -30,10 +33,6 @@ void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
         .h = element_data.boundingBox.height,
     };
     if (myEventType != 0) {
-      SDL_Event start_text_edit;
-      SDL_zero(start_text_edit);
-      start_text_edit.type = myEventType;
-      start_text_edit.user.code = 1;
       start_text_edit.user.data1 = element_area;
       SDL_PushEvent(&start_text_edit);
     }

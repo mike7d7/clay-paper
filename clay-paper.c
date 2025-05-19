@@ -123,6 +123,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
                   (Clay_ErrorHandler){HandleClayErrors});
   Clay_SetMeasureTextFunction(SDL_MeasureText, state->rendererData.fonts);
 
+  InitializeCustomEvents();
   *appstate = state;
   return SDL_APP_CONTINUE;
 }
