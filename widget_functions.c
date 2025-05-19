@@ -14,15 +14,14 @@ TextEditData default_data = (TextEditData){
     .maxLength = sizeof(empty_buffer),
 };
 
-void HandleTextEditInteraction(Clay_ElementId elementId,
-                               Clay_PointerData pointer_data,
+void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
                                intptr_t userData) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
     if (!text_input_initialized) {
       myEventType = SDL_RegisterEvents(1);
       text_input_initialized = !text_input_initialized;
     }
-    Clay_ElementData element_data = Clay_GetElementData(elementId);
+    Clay_ElementData element_data = Clay_GetElementData(id);
     SDL_Rect *element_area = malloc(sizeof(SDL_Rect));
     *element_area = (SDL_Rect){
         .x = element_data.boundingBox.x,
