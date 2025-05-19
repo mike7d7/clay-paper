@@ -100,7 +100,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   }
 
   TTF_Font *font = TTF_OpenFont(
-      "/nix/store/z52y6yr69xa38ynsf4dssm5phvcb9dvp-liberation-fonts-2.1.5/"
+      "/nix/store/vl44mgyhq46plr28vfj06zj9lk89jyaw-liberation-fonts-2.1.5/"
       "share/fonts/truetype/LiberationMono-Regular.ttf",
       24);
   if (!font) {
