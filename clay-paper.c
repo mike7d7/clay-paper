@@ -156,11 +156,15 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     Clay_UpdateScrollContainers(
         true, (Clay_Vector2){event->wheel.x, event->wheel.y}, 0.01f);
     break;
-  case SDL_EVENT_USER:
+  case SDL_EVENT_USER: // start_text_edit
     SDL_StartTextInput(state->window);
     SDL_SetTextInputArea(state->window, event->user.data1, 0);
     editing_text = true;
     free(event->user.data1);
+    break;
+  case SDL_EVENT_USER + 1: // end_text_edit
+    SDL_StopTextInput(state->window);
+    editing_text = false;
     break;
   case SDL_EVENT_TEXT_INPUT:
     strcat(empty_buffer, event->text.text);

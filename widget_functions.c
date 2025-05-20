@@ -5,8 +5,9 @@
 
 char empty_buffer[1024];
 bool text_input_initialized = false;
-Uint32 myEventType;
+Uint32 registered_event_type;
 SDL_Event start_text_edit;
+SDL_Event end_text_edit;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
@@ -15,10 +16,15 @@ TextEditData default_data = (TextEditData){
     .maxLength = sizeof(empty_buffer),
 };
 void InitializeCustomEvents() {
-  myEventType = SDL_RegisterEvents(1);
+  registered_event_type = SDL_RegisterEvents(2);
+
   SDL_zero(start_text_edit);
-  start_text_edit.type = myEventType;
+  start_text_edit.type = registered_event_type;
   start_text_edit.user.code = 1;
+
+  SDL_zero(end_text_edit);
+  end_text_edit.type = registered_event_type + 1;
+  end_text_edit.user.code = 2;
 }
 
 void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
@@ -32,7 +38,7 @@ void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
         .w = element_data.boundingBox.width,
         .h = element_data.boundingBox.height,
     };
-    if (myEventType != 0) {
+    if (registered_event_type != 0) {
       start_text_edit.user.data1 = element_area;
       SDL_PushEvent(&start_text_edit);
     }
@@ -48,10 +54,12 @@ void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data) {
 }
 
 void HandleClearButton(Clay_ElementId id, Clay_PointerData pointer_data) {
-
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
     for (int i = 0; i < sizeof(default_data.textToEdit); i++) {
       default_data.textToEdit[i] = 0;
+    }
+    if (registered_event_type != 0) {
+      SDL_PushEvent(&end_text_edit);
     }
   }
 }
