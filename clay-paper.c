@@ -11,6 +11,8 @@
 #include "clay_renderer_SDL3.c"
 #include "widgets.h"
 
+#define NUMBER_OF_FONTS 1
+
 static const Uint32 FONT_ID = 0;
 bool editing_text = false;
 
@@ -92,7 +94,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
     return SDL_APP_FAILURE;
   }
 
-  state->rendererData.fonts = SDL_calloc(1, sizeof(TTF_Font *));
+  state->rendererData.fonts = SDL_calloc(NUMBER_OF_FONTS, sizeof(TTF_Font *));
   if (!state->rendererData.fonts) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                  "Failed to allocate memory for the font array: %s",
@@ -230,9 +232,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
       SDL_DestroyWindow(state->window);
 
     if (state->rendererData.fonts) {
-      for (size_t i = 0; i < sizeof(state->rendererData.fonts) /
-                                 sizeof(*state->rendererData.fonts);
-           i++) {
+      for (size_t i = 0; i < NUMBER_OF_FONTS; i++) {
         TTF_CloseFont(state->rendererData.fonts[i]);
       }
 
