@@ -1,3 +1,4 @@
+#include <string.h>
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
@@ -176,6 +177,12 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
       if (event->key.key == SDLK_ESCAPE || event->key.key == SDLK_RETURN) {
         SDL_StopTextInput(state->window);
         editing_text = false;
+      }
+      if (event->key.key == SDLK_BACKSPACE) {
+        int length = strlen(empty_buffer);
+        if (length > 0) {
+          empty_buffer[length - 1] = '\0';
+        }
       }
     } else {
       if (event->key.key == SDLK_ESCAPE) {
