@@ -1,7 +1,6 @@
 #include "clay.h"
 #include "widget_functions.h"
 #include <SDL3/SDL.h>
-#include <stdint.h>
 #include <string.h>
 
 const int FONT_ID_BODY_16 = 0;
