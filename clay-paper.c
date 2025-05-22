@@ -1,3 +1,4 @@
+#include "SDL3/SDL_mouse.h"
 #include <string.h>
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL.h>
@@ -218,6 +219,12 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
   SDL_Clay_RenderClayCommands(&state->rendererData, &render_commands);
 
   SDL_RenderPresent(state->rendererData.renderer);
+
+  if (Clay_PointerOver(Clay_GetElementId(CLAY_STRING("search")))) {
+    SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_TEXT));
+  } else {
+    SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_DEFAULT));
+  }
 
   return SDL_APP_CONTINUE;
 }
