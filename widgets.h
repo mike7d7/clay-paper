@@ -1,6 +1,8 @@
 #include "clay.h"
 #include "widget_functions.h"
 #include <SDL3/SDL.h>
+#include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 const int FONT_ID_BODY_16 = 0;
@@ -59,6 +61,52 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
   }
 }
 
+void DropDownButton(Clay_String id, Clay_String text,
+                    Clay_String *dropdown_elements,
+                    uint_fast32_t number_of_elements) {
+  // HeaderButton
+  CLAY({.id = CLAY_SID(id),
+        .layout = {.padding = {16, 16, 8, 8}},
+        .backgroundColor = {140, 140, 140, 255},
+        .cornerRadius = CLAY_CORNER_RADIUS(5)}) {
+    // Clay_OnHover(on_click_function, 0);
+    CLAY_TEXT(text, CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
+                                      .fontSize = 16,
+                                      .textColor = {255, 255, 255, 255}}));
+    // Dropdown Menu
+    bool name_dropdown_active =
+        Clay_PointerOver(Clay_GetElementId(id)) ||
+        Clay_PointerOver(Clay_GetElementId(CLAY_STRING("Dropdown")));
+    if (name_dropdown_active) {
+      char *dropdown_id = malloc(strlen(id.chars) + strlen("-dropdown") + 1);
+      strcpy(dropdown_id, id.chars);
+      strcat(dropdown_id, "-dropdown");
+      CLAY({
+          .id = CLAY_ID("Dropdown"),
+          .layout = {.padding = {16, 16, 8, 8},
+                     .layoutDirection = CLAY_TOP_TO_BOTTOM},
+          .backgroundColor = {40, 40, 40, 255},
+          .cornerRadius = CLAY_CORNER_RADIUS(5),
+          .floating = {.attachTo = CLAY_ATTACH_TO_PARENT,
+                       .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_TOP,
+                                        .parent =
+                                            CLAY_ATTACH_POINT_LEFT_BOTTOM}},
+      }) {
+        for (int i = 0; i < number_of_elements; i++) {
+          CLAY({.id = CLAY_SID(dropdown_elements[i]),
+                .layout = {.padding = {0, 0, 8, 8}}}) {
+            CLAY_TEXT(dropdown_elements[i],
+                      CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
+                                        .fontSize = 16,
+                                        .textColor = {255, 255, 255, 255}}));
+          };
+        }
+      };
+      free(dropdown_id);
+    }
+  }
+}
+
 void HeaderBar() {
   CLAY({
       .id = CLAY_ID("header"),
@@ -75,7 +123,9 @@ void HeaderBar() {
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Clear"), CLAY_STRING("Clear"), HandleClearButton);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Name"), CLAY_STRING("Name"), HandleExitButton);
+    Clay_String names_arr[] = {CLAY_STRING("Name ↓"), CLAY_STRING("Name ↑"),
+                               CLAY_STRING("Date ↓"), CLAY_STRING("Date ↑")};
+    DropDownButton(CLAY_STRING("Name"), CLAY_STRING("Name"), names_arr, 4);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Refresh"), CLAY_STRING("Refresh"),
                  HandleExitButton);
