@@ -12,6 +12,7 @@ typedef struct {
 // terminator).
 extern char empty_buffer[];
 extern TextEditData default_data;
+extern bool editing_text;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,

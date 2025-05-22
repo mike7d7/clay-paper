@@ -8,6 +8,7 @@ bool text_input_initialized = false;
 Uint32 registered_event_type;
 SDL_Event start_text_edit;
 SDL_Event end_text_edit;
+bool editing_text = false;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),

@@ -11,6 +11,7 @@ Clay_Color COLOR_BACKGROUND = {53, 53, 53, 255};
 Clay_Color COLOR_ELEMENT_BACKGROUND = {255, 255, 255, 255};
 Clay_Color COLOR_TEXTEDIT_HOVERED = {40, 52, 64, 255};
 Clay_Color COLOR_TEXTEDIT_NORMAL = {30, 41, 53, 255};
+Clay_Color COLOR_TEXTEDIT_ACTIVE = {104, 133, 161, 255};
 #define TOP_WIDTH 400
 
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
@@ -42,6 +43,8 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
       text.chars = masked;
     }
   }
+  const Clay_BorderWidth border_text_active = {3, 3, 3, 3};
+  const Clay_BorderWidth border_text_inactive = {0, 0, 0, 0};
 
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = CLAY_PADDING_ALL(10),
@@ -49,7 +52,10 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
                    .sizing = {CLAY_SIZING_FIXED(TOP_WIDTH / 1.6f)}},
         .backgroundColor =
             Clay_Hovered() ? COLOR_TEXTEDIT_HOVERED : COLOR_TEXTEDIT_NORMAL,
-        .cornerRadius = {.topLeft = 8}}) {
+        .cornerRadius = {8, 8, 8, 8},
+        .border = {.width =
+                       editing_text ? border_text_active : border_text_inactive,
+                   .color = COLOR_TEXTEDIT_ACTIVE}}) {
     Clay_OnHover(HandleTextEditInteraction, 0);
     CLAY_TEXT(
         text.length > 0 ? text : data->hintText,

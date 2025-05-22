@@ -16,7 +16,6 @@
 #define NUMBER_OF_FONTS 1
 
 static const Uint32 FONT_ID = 0;
-bool editing_text = false;
 
 typedef struct app_state {
   SDL_Window *window;
