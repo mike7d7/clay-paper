@@ -69,7 +69,8 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
 
 void DropDownButton(Clay_String id, Clay_String text,
                     Clay_String *dropdown_elements,
-                    uint_fast32_t number_of_elements) {
+                    uint_fast32_t number_of_elements,
+                    uint_fast32_t id_offset /*should be !=0*/) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {16, 16, 8, 8}},
@@ -80,15 +81,11 @@ void DropDownButton(Clay_String id, Clay_String text,
                                       .fontSize = 16,
                                       .textColor = {255, 255, 255, 255}}));
     // Dropdown Menu
-    bool name_dropdown_active =
-        Clay_PointerOver(Clay_GetElementId(id)) ||
-        Clay_PointerOver(Clay_GetElementId(CLAY_STRING("Dropdown")));
+    bool name_dropdown_active = Clay_PointerOver(Clay_GetElementId(id)) ||
+                                Clay_PointerOver(CLAY_SIDI(id, id_offset));
     if (name_dropdown_active) {
-      char *dropdown_id = malloc(strlen(id.chars) + strlen("-dropdown") + 1);
-      strcpy(dropdown_id, id.chars);
-      strcat(dropdown_id, "-dropdown");
       CLAY({
-          .id = CLAY_ID("Dropdown"),
+          .id = CLAY_SIDI(id, id_offset),
           .layout = {.padding = {16, 16, 8, 8},
                      .layoutDirection = CLAY_TOP_TO_BOTTOM},
           .backgroundColor = {40, 40, 40, 255},
@@ -131,7 +128,7 @@ void HeaderBar() {
     HorizontalSpacer();
     Clay_String names_arr[] = {CLAY_STRING("Name ↓"), CLAY_STRING("Name ↑"),
                                CLAY_STRING("Date ↓"), CLAY_STRING("Date ↑")};
-    DropDownButton(CLAY_STRING("Name"), CLAY_STRING("Name"), names_arr, 4);
+    DropDownButton(CLAY_STRING("Name"), CLAY_STRING("Name"), names_arr, 4, 1);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Refresh"), CLAY_STRING("Refresh"),
                  HandleExitButton);
