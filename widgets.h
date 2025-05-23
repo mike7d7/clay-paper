@@ -105,7 +105,6 @@ void DropDownButton(Clay_String id, Clay_String text,
           };
         }
       };
-      free(dropdown_id);
     }
   }
 }
