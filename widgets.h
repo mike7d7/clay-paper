@@ -18,7 +18,7 @@ void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {16, 16, 8, 8}},
         .backgroundColor = {140, 140, 140, 255},
-        .cornerRadius = CLAY_CORNER_RADIUS(5)}) {
+        .cornerRadius = CLAY_CORNER_RADIUS(12)}) {
     Clay_OnHover(on_click_function, 0);
     CLAY_TEXT(text, CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
                                       .fontSize = 16,
@@ -47,12 +47,12 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
   const Clay_BorderWidth border_text_inactive = {0, 0, 0, 0};
 
   CLAY({.id = CLAY_SID(id),
-        .layout = {.padding = CLAY_PADDING_ALL(10),
+        .layout = {.padding = {16, 16, 8, 8},
                    .childAlignment = {.y = CLAY_ALIGN_Y_CENTER},
                    .sizing = {CLAY_SIZING_FIXED(TOP_WIDTH / 1.6f)}},
         .backgroundColor =
             Clay_Hovered() ? COLOR_TEXTEDIT_HOVERED : COLOR_TEXTEDIT_NORMAL,
-        .cornerRadius = {8, 8, 8, 8},
+        .cornerRadius = CLAY_CORNER_RADIUS(12),
         .border = {.width =
                        editing_text ? border_text_active : border_text_inactive,
                    .color = COLOR_TEXTEDIT_ACTIVE}}) {
@@ -75,7 +75,7 @@ void DropDownButton(Clay_String id, Clay_String text,
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {16, 16, 8, 8}},
         .backgroundColor = {140, 140, 140, 255},
-        .cornerRadius = CLAY_CORNER_RADIUS(5)}) {
+        .cornerRadius = CLAY_CORNER_RADIUS(12)}) {
     // Clay_OnHover(on_click_function, 0);
     CLAY_TEXT(text, CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
                                       .fontSize = 16,
@@ -89,7 +89,7 @@ void DropDownButton(Clay_String id, Clay_String text,
           .layout = {.padding = {16, 16, 8, 8},
                      .layoutDirection = CLAY_TOP_TO_BOTTOM},
           .backgroundColor = {40, 40, 40, 255},
-          .cornerRadius = CLAY_CORNER_RADIUS(5),
+          .cornerRadius = CLAY_CORNER_RADIUS(12),
           .floating = {.attachTo = CLAY_ATTACH_TO_PARENT,
                        .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_TOP,
                                         .parent =
