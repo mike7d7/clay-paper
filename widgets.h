@@ -12,6 +12,8 @@ Clay_Color COLOR_ELEMENT_BACKGROUND = {255, 255, 255, 255};
 Clay_Color COLOR_TEXTEDIT_HOVERED = {40, 52, 64, 255};
 Clay_Color COLOR_TEXTEDIT_NORMAL = {30, 41, 53, 255};
 Clay_Color COLOR_TEXTEDIT_ACTIVE = {104, 133, 161, 255};
+Clay_Color COLOR_CATPPUCCIN_GREEN = {64, 160, 43, 255};
+Clay_Color COLOR_TRANSPARENT = {0, 0, 0, 0};
 #define TOP_WIDTH 400
 
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
@@ -109,6 +111,65 @@ void DropDownButton(Clay_String id, Clay_String text,
   }
 }
 
+void DropDownCheckBoxButton(Clay_String id, Clay_String text,
+                            Clay_String *dropdown_elements,
+                            uint_fast32_t number_of_elements,
+                            void *on_click_function) {
+  // HeaderButton
+  CLAY({.id = CLAY_SID(id),
+        .layout = {.padding = {16, 16, 8, 8}},
+        .backgroundColor = {140, 140, 140, 255},
+        .cornerRadius = CLAY_CORNER_RADIUS(12)}) {
+    // Clay_OnHover(on_click_function, 0);
+    CLAY_TEXT(text, CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
+                                      .fontSize = 16,
+                                      .textColor = {255, 255, 255, 255}}));
+    // Dropdown Menu
+    bool name_dropdown_active = Clay_PointerOver(Clay_GetElementId(id)) ||
+                                Clay_PointerOver(CLAY_SIDI(id, 1));
+    if (name_dropdown_active) {
+      CLAY({
+          .id = CLAY_SIDI(id, 1),
+          .layout = {.padding = {16, 16, 8, 8},
+                     .layoutDirection = CLAY_TOP_TO_BOTTOM},
+          .backgroundColor = {40, 40, 40, 255},
+          .cornerRadius = CLAY_CORNER_RADIUS(12),
+          .floating = {.attachTo = CLAY_ATTACH_TO_PARENT,
+                       .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_TOP,
+                                        .parent =
+                                            CLAY_ATTACH_POINT_LEFT_BOTTOM}},
+      }) {
+        for (int i = 0; i < number_of_elements; i++) {
+          CLAY({
+              .id = CLAY_SID(dropdown_elements[i]),
+              .layout = {.padding = {0, 0, 8, 8},
+                         .layoutDirection = CLAY_LEFT_TO_RIGHT,
+                         .childAlignment = {.x = CLAY_ALIGN_X_CENTER,
+                                            .y = CLAY_ALIGN_Y_CENTER}},
+          }) {
+            Clay_OnHover(on_click_function, i);
+            CLAY({.layout.padding = {0, 8, 0, 4}}) {
+              CLAY({
+                  .layout = {.sizing = {.height = CLAY_SIZING_FIXED(16),
+                                        .width = CLAY_SIZING_FIXED(16)}},
+                  .backgroundColor = (config_options & 1 << i)
+                                         ? COLOR_CATPPUCCIN_GREEN
+                                         : COLOR_TRANSPARENT,
+                  .border = {.width = {2, 2, 2, 2}, .color = COLOR_WHITE},
+              });
+            };
+
+            CLAY_TEXT(dropdown_elements[i],
+                      CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
+                                        .fontSize = 16,
+                                        .textColor = {255, 255, 255, 255}}));
+          };
+        }
+      };
+    }
+  }
+}
+
 void HeaderBar() {
   CLAY({
       .id = CLAY_ID("header"),
@@ -135,8 +196,12 @@ void HeaderBar() {
     HeaderButton(CLAY_STRING("Random"), CLAY_STRING("Random"),
                  HandleExitButton);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Options"), CLAY_STRING("Options"),
-                 HandleExitButton);
+    Clay_String options_arr[] = {
+        CLAY_STRING("Show GIFs only"), CLAY_STRING("Show subfolders"),
+        CLAY_STRING("Show all subfolders"), CLAY_STRING("Show hidden"),
+        CLAY_STRING("Show path in tooltip")};
+    DropDownCheckBoxButton(CLAY_STRING("Options"), CLAY_STRING("Options"),
+                           options_arr, 5, HandleOptionsButton);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Exit"), CLAY_STRING("Exit"), HandleExitButton);
     HorizontalSpacer();

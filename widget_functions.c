@@ -9,6 +9,7 @@ Uint32 registered_event_type;
 SDL_Event start_text_edit;
 SDL_Event end_text_edit;
 bool editing_text = false;
+uint32_t config_options = 1;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
@@ -62,5 +63,12 @@ void HandleClearButton(Clay_ElementId id, Clay_PointerData pointer_data) {
     if (registered_event_type != 0) {
       SDL_PushEvent(&end_text_edit);
     }
+  }
+}
+
+void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
+                         int config) {
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    config_options ^= 1 << config;
   }
 }
