@@ -78,13 +78,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   }
   *appstate = state;
 
-  if (!SDL_CreateWindowAndRenderer("Clay Demo", 640, 480, 0, &state->window,
+  if (!SDL_CreateWindowAndRenderer("Clay Demo", 800, 600, SDL_WINDOW_RESIZABLE,
+                                   &state->window,
                                    &state->rendererData.renderer)) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                  "Failed to create window and renderer: %s", SDL_GetError());
     return SDL_APP_FAILURE;
   }
-  SDL_SetWindowResizable(state->window, true);
 
   state->rendererData.textEngine =
       TTF_CreateRendererTextEngine(state->rendererData.renderer);
