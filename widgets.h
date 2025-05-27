@@ -207,3 +207,31 @@ void HeaderBar() {
     HorizontalSpacer();
   };
 }
+
+int test_array[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+void ImageGrid(int array_size) {
+  CLAY({.id = CLAY_ID("image_grid"),
+        .clip = {.vertical = true, .childOffset = Clay_GetScrollOffset()},
+        .layout = {.sizing = {CLAY_SIZING_GROW(), CLAY_SIZING_GROW()},
+                   .layoutDirection = CLAY_TOP_TO_BOTTOM,
+                   .childGap = 16,
+                   .padding = {16, 16, 0, 0},
+                   .childAlignment = {.x = CLAY_ALIGN_X_CENTER}},
+        .backgroundColor = COLOR_BACKGROUND}) {
+    for (int i = 0; i < array_size; i += 3) {
+      CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIT(),
+                                  .width = CLAY_SIZING_FIT()},
+                       .layoutDirection = CLAY_LEFT_TO_RIGHT,
+                       .childGap = 16},
+            .backgroundColor = COLOR_BACKGROUND}) {
+        for (int j = 0; j < 3 && i + j < array_size; j++) {
+            CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(300),
+                                        .width = CLAY_SIZING_FIXED(300)}},
+                  .backgroundColor = COLOR_CATPPUCCIN_GREEN,
+                  .border = {.color = COLOR_TEXTEDIT_ACTIVE,
+                             .width = {8, 8, 8, 8}}});
+        }
+      };
+    }
+  };
+}

@@ -50,10 +50,11 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout() {
                 .layoutDirection = CLAY_TOP_TO_BOTTOM,
                 .sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)},
                 .padding = CLAY_PADDING_ALL(16),
+                .childGap = 16,
             },
         .backgroundColor = COLOR_BACKGROUND}) {
     HeaderBar();
-    CLAY({.layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)}}});
+    ImageGrid(11);
     CLAY({
         .id = CLAY_ID("footer"),
         .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)}},
