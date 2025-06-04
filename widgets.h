@@ -6,14 +6,14 @@
 #include <string.h>
 
 const int FONT_ID_BODY_16 = 0;
-Clay_Color COLOR_WHITE = {255, 255, 255, 255};
-Clay_Color COLOR_BACKGROUND = {53, 53, 53, 255};
-Clay_Color COLOR_ELEMENT_BACKGROUND = {255, 255, 255, 255};
-Clay_Color COLOR_TEXTEDIT_HOVERED = {40, 52, 64, 255};
-Clay_Color COLOR_TEXTEDIT_NORMAL = {30, 41, 53, 255};
-Clay_Color COLOR_TEXTEDIT_ACTIVE = {104, 133, 161, 255};
-Clay_Color COLOR_CATPPUCCIN_GREEN = {64, 160, 43, 255};
-Clay_Color COLOR_TRANSPARENT = {0, 0, 0, 0};
+const Clay_Color COLOR_WHITE = {255, 255, 255, 255};
+const Clay_Color COLOR_BACKGROUND = {53, 53, 53, 255};
+const Clay_Color COLOR_ELEMENT_BACKGROUND = {255, 255, 255, 255};
+const Clay_Color COLOR_TEXTEDIT_HOVERED = {40, 52, 64, 255};
+const Clay_Color COLOR_TEXTEDIT_NORMAL = {30, 41, 53, 255};
+const Clay_Color COLOR_TEXTEDIT_ACTIVE = {104, 133, 161, 255};
+const Clay_Color COLOR_CATPPUCCIN_GREEN = {64, 160, 43, 255};
+const Clay_Color COLOR_TRANSPARENT = {0, 0, 0, 0};
 #define TOP_WIDTH 400
 
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
