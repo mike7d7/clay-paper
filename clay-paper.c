@@ -107,7 +107,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   TTF_Font *font = TTF_OpenFont(
       "/nix/store/vl44mgyhq46plr28vfj06zj9lk89jyaw-liberation-fonts-2.1.5/"
       "share/fonts/truetype/LiberationMono-Regular.ttf",
-      24);
+      16);
   if (!font) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to load font: %s",
                  SDL_GetError());

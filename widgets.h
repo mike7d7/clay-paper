@@ -15,13 +15,13 @@ const Clay_Color COLOR_TEXTEDIT_ACTIVE = {104, 133, 161, 255};
 const Clay_Color COLOR_CATPPUCCIN_GREEN = {64, 160, 43, 255};
 const Clay_Color COLOR_TRANSPARENT = {0, 0, 0, 0};
 const Clay_BorderElementConfig image_border = {.color = COLOR_TEXTEDIT_ACTIVE,
-                                         .width = {8, 8, 8, 8}};
+                                               .width = {8, 8, 8, 8}};
 const Clay_BorderElementConfig image_no_border = {.width = {0, 0, 0, 0}};
 #define TOP_WIDTH 400
 
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
   CLAY({.id = CLAY_SID(id),
-        .layout = {.padding = {16, 16, 8, 8}},
+        .layout = {.padding = {10, 10, 6, 6}},
         .backgroundColor = {140, 140, 140, 255},
         .cornerRadius = CLAY_CORNER_RADIUS(12)}) {
     Clay_OnHover(on_click_function, 0);
@@ -52,9 +52,9 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
   const Clay_BorderWidth border_text_inactive = {0, 0, 0, 0};
 
   CLAY({.id = CLAY_SID(id),
-        .layout = {.padding = {16, 16, 8, 8},
+        .layout = {.padding = {10, 10, 6, 6},
                    .childAlignment = {.y = CLAY_ALIGN_Y_CENTER},
-                   .sizing = {CLAY_SIZING_FIXED(TOP_WIDTH / 1.6f)}},
+                   .sizing = {.width = CLAY_SIZING_FIXED(TOP_WIDTH / 2.0f)}},
         .backgroundColor =
             Clay_Hovered() ? COLOR_TEXTEDIT_HOVERED : COLOR_TEXTEDIT_NORMAL,
         .cornerRadius = CLAY_CORNER_RADIUS(12),
@@ -78,7 +78,7 @@ void DropDownButton(Clay_String id, Clay_String text,
                     uint_fast32_t id_offset /*should be !=0*/) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),
-        .layout = {.padding = {16, 16, 8, 8}},
+        .layout = {.padding = {10, 10, 6, 6}},
         .backgroundColor = {140, 140, 140, 255},
         .cornerRadius = CLAY_CORNER_RADIUS(12)}) {
     // Clay_OnHover(on_click_function, 0);
@@ -91,7 +91,7 @@ void DropDownButton(Clay_String id, Clay_String text,
     if (name_dropdown_active) {
       CLAY({
           .id = CLAY_SIDI(id, id_offset),
-          .layout = {.padding = {16, 16, 8, 8},
+          .layout = {.padding = {10, 10, 6, 6},
                      .layoutDirection = CLAY_TOP_TO_BOTTOM},
           .backgroundColor = {40, 40, 40, 255},
           .cornerRadius = CLAY_CORNER_RADIUS(12),
@@ -102,7 +102,7 @@ void DropDownButton(Clay_String id, Clay_String text,
       }) {
         for (int i = 0; i < number_of_elements; i++) {
           CLAY({.id = CLAY_SID(dropdown_elements[i]),
-                .layout = {.padding = {0, 0, 8, 8}}}) {
+                .layout = {.padding = {0, 0, 6, 6}}}) {
             CLAY_TEXT(dropdown_elements[i],
                       CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
                                         .fontSize = 16,
@@ -120,7 +120,7 @@ void DropDownCheckBoxButton(Clay_String id, Clay_String text,
                             void *on_click_function) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),
-        .layout = {.padding = {16, 16, 8, 8}},
+        .layout = {.padding = {10, 10, 6, 6}},
         .backgroundColor = {140, 140, 140, 255},
         .cornerRadius = CLAY_CORNER_RADIUS(12)}) {
     // Clay_OnHover(on_click_function, 0);
@@ -133,9 +133,9 @@ void DropDownCheckBoxButton(Clay_String id, Clay_String text,
     if (name_dropdown_active) {
       CLAY({
           .id = CLAY_SIDI(id, 1),
-          .layout = {.padding = {16, 16, 8, 8},
+          .layout = {.padding = {10, 10, 6, 6},
                      .layoutDirection = CLAY_TOP_TO_BOTTOM},
-          .backgroundColor = {40, 40, 40, 255},
+          .backgroundColor = {30, 30, 30, 255},
           .cornerRadius = CLAY_CORNER_RADIUS(12),
           .floating = {.attachTo = CLAY_ATTACH_TO_PARENT,
                        .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_TOP,
@@ -145,13 +145,13 @@ void DropDownCheckBoxButton(Clay_String id, Clay_String text,
         for (int i = 0; i < number_of_elements; i++) {
           CLAY({
               .id = CLAY_SID(dropdown_elements[i]),
-              .layout = {.padding = {0, 0, 8, 8},
+              .layout = {.padding = {0, 0, 6, 6},
                          .layoutDirection = CLAY_LEFT_TO_RIGHT,
                          .childAlignment = {.x = CLAY_ALIGN_X_CENTER,
                                             .y = CLAY_ALIGN_Y_CENTER}},
           }) {
             Clay_OnHover(on_click_function, i);
-            CLAY({.layout.padding = {0, 8, 0, 4}}) {
+            CLAY({.layout.padding = {0, 6, 0, 4}}) {
               CLAY({
                   .layout = {.sizing = {.height = CLAY_SIZING_FIXED(16),
                                         .width = CLAY_SIZING_FIXED(16)}},
@@ -176,12 +176,12 @@ void DropDownCheckBoxButton(Clay_String id, Clay_String text,
 void HeaderBar() {
   CLAY({
       .id = CLAY_ID("header"),
-      .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)},
+      .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIT(0)},
                  .childAlignment = {.y = CLAY_ALIGN_Y_CENTER,
-                                    .x = CLAY_ALIGN_X_CENTER}},
-      .backgroundColor = COLOR_ELEMENT_BACKGROUND,
+                                    .x = CLAY_ALIGN_X_CENTER},
+                 .padding = {0, 0, 0, 0}},
+      .backgroundColor = COLOR_TRANSPARENT,
   }) {
-    HorizontalSpacer();
     HeaderButton(CLAY_STRING("Folder"), CLAY_STRING("Folder"),
                  HandleExitButton);
     HorizontalSpacer();
@@ -207,7 +207,6 @@ void HeaderBar() {
                            options_arr, 5, HandleOptionsButton);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Exit"), CLAY_STRING("Exit"), HandleExitButton);
-    HorizontalSpacer();
   };
 }
 
@@ -228,8 +227,8 @@ void ImageGrid(int array_size) {
                        .childGap = 16},
             .backgroundColor = COLOR_BACKGROUND}) {
         for (int j = 0; j < 3 && i + j < array_size; j++) {
-          CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(300),
-                                      .width = CLAY_SIZING_FIXED(300)}},
+          CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(200),
+                                      .width = CLAY_SIZING_FIXED(200)}},
                 .backgroundColor = COLOR_CATPPUCCIN_GREEN,
                 .border = (i == 0 && j == 0) ? image_border : image_no_border});
         }
