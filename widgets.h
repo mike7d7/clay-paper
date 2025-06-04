@@ -14,6 +14,9 @@ const Clay_Color COLOR_TEXTEDIT_NORMAL = {30, 41, 53, 255};
 const Clay_Color COLOR_TEXTEDIT_ACTIVE = {104, 133, 161, 255};
 const Clay_Color COLOR_CATPPUCCIN_GREEN = {64, 160, 43, 255};
 const Clay_Color COLOR_TRANSPARENT = {0, 0, 0, 0};
+const Clay_BorderElementConfig image_border = {.color = COLOR_TEXTEDIT_ACTIVE,
+                                         .width = {8, 8, 8, 8}};
+const Clay_BorderElementConfig image_no_border = {.width = {0, 0, 0, 0}};
 #define TOP_WIDTH 400
 
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
@@ -225,11 +228,10 @@ void ImageGrid(int array_size) {
                        .childGap = 16},
             .backgroundColor = COLOR_BACKGROUND}) {
         for (int j = 0; j < 3 && i + j < array_size; j++) {
-            CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(300),
-                                        .width = CLAY_SIZING_FIXED(300)}},
-                  .backgroundColor = COLOR_CATPPUCCIN_GREEN,
-                  .border = {.color = COLOR_TEXTEDIT_ACTIVE,
-                             .width = {8, 8, 8, 8}}});
+          CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(300),
+                                      .width = CLAY_SIZING_FIXED(300)}},
+                .backgroundColor = COLOR_CATPPUCCIN_GREEN,
+                .border = (i == 0 && j == 0) ? image_border : image_no_border});
         }
       };
     }
