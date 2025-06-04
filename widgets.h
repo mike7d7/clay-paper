@@ -138,7 +138,7 @@ void DropDownCheckBoxButton(Clay_String id, Clay_String text,
           .backgroundColor = {30, 30, 30, 255},
           .cornerRadius = CLAY_CORNER_RADIUS(12),
           .floating = {.attachTo = CLAY_ATTACH_TO_PARENT,
-                       .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_TOP,
+                       .attachPoints = {.element = CLAY_ATTACH_POINT_CENTER_TOP,
                                         .parent =
                                             CLAY_ATTACH_POINT_LEFT_BOTTOM}},
       }) {
