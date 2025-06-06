@@ -228,14 +228,10 @@ void ImageGrid(int array_size, SDL_Texture *img) {
                        .childGap = 16},
             .backgroundColor = COLOR_BACKGROUND}) {
         for (int j = 0; j < 3 && i + j < array_size; j++) {
-          // CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(200),
-          //                             .width = CLAY_SIZING_FIXED(200)}},
-          //       .backgroundColor = COLOR_CATPPUCCIN_GREEN,
-          //       .border = (i == 0 && j == 0) ? image_border :
-          //       image_no_border});
           CLAY({.layout = {.sizing = {.width = CLAY_SIZING_FIXED(200),
                                       .height = CLAY_SIZING_FIXED(200)}},
-                .image = {.imageData = img, .sourceDimensions = {200,200}}});
+                .image = {.imageData = img, .sourceDimensions = {200,200}},
+                .border = (i == 0 && j == 0) ? image_border : image_no_border});
         }
       };
     }
