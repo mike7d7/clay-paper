@@ -117,29 +117,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   }
 
   state->rendererData.fonts[FONT_ID] = font;
-  img =
-      SDL_CreateTexture(state->rendererData.renderer, SDL_PIXELFORMAT_RGBA8888,
-                        SDL_TEXTUREACCESS_STATIC, 200, 200);
-  if (!img) {
-    SDL_Log("Failed to create texture: %s", SDL_GetError());
-    // handle error
-  }
-  int width2 = 200;
-  int height2 = 200;
-  Uint32 red =
-      0xFF0000FF; // RGBA (red, green, blue, alpha) – full red, full alpha
-  Uint32 *pixels = malloc(width2 * height2 * sizeof(Uint32));
+  img = IMG_LoadTexture(state->rendererData.renderer,
+                        "/home/mig/Images/.w/1-default.JPG");
 
-  if (!pixels) {
-    SDL_Log("Failed to allocate pixel buffer");
-    // handle error
-  }
-
-  // Fill buffer with red
-  for (int i = 0; i < width2 * height2; ++i) {
-    pixels[i] = red;
-  }
-  SDL_UpdateTexture(img, NULL, pixels, width2 * sizeof(Uint32));
   /* Initialize Clay */
   uint64_t totalMemorySize = Clay_MinMemorySize();
   Clay_Arena clayMemory = (Clay_Arena){.memory = SDL_malloc(totalMemorySize),
