@@ -1,3 +1,4 @@
+#include "SDL3/SDL_render.h"
 #include "clay.h"
 #include "widget_functions.h"
 #include <SDL3/SDL.h>
@@ -211,7 +212,7 @@ void HeaderBar() {
 }
 
 int test_array[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-void ImageGrid(int array_size) {
+void ImageGrid(int array_size, SDL_Texture *img) {
   CLAY({.id = CLAY_ID("image_grid"),
         .clip = {.vertical = true, .childOffset = Clay_GetScrollOffset()},
         .layout = {.sizing = {CLAY_SIZING_GROW(), CLAY_SIZING_GROW()},
@@ -227,10 +228,14 @@ void ImageGrid(int array_size) {
                        .childGap = 16},
             .backgroundColor = COLOR_BACKGROUND}) {
         for (int j = 0; j < 3 && i + j < array_size; j++) {
-          CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(200),
-                                      .width = CLAY_SIZING_FIXED(200)}},
-                .backgroundColor = COLOR_CATPPUCCIN_GREEN,
-                .border = (i == 0 && j == 0) ? image_border : image_no_border});
+          // CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(200),
+          //                             .width = CLAY_SIZING_FIXED(200)}},
+          //       .backgroundColor = COLOR_CATPPUCCIN_GREEN,
+          //       .border = (i == 0 && j == 0) ? image_border :
+          //       image_no_border});
+          CLAY({.layout = {.sizing = {.width = CLAY_SIZING_FIXED(200),
+                                      .height = CLAY_SIZING_FIXED(200)}},
+                .image = {.imageData = img, .sourceDimensions = {200,200}}});
         }
       };
     }

@@ -62,7 +62,7 @@
             dontStrip = true;
             # dont use address sanitizer since with it SDL fails with 'No available video device'
             buildPhase = ''
-              clang clay-paper.c widget_functions.c -o clay-paper-debug `pkg-config --libs --cflags sdl3 sdl3-ttf` -glldb -O0
+              clang clay-paper.c widget_functions.c -o clay-paper-debug `pkg-config --libs --cflags sdl3 sdl3-ttf sdl3-image` -glldb -O0
             '';
             installPhase = ''
               mkdir -p $out/bin

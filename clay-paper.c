@@ -1,4 +1,6 @@
 #include "SDL3/SDL_mouse.h"
+#include "SDL3/SDL_render.h"
+#include "SDL3_image/SDL_image.h"
 #include <string.h>
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL.h>
@@ -41,7 +43,7 @@ void HandleClayErrors(Clay_ErrorData errorData) {
   printf("%s", errorData.errorText.chars);
 }
 
-Clay_RenderCommandArray ClayImageSample_CreateLayout() {
+Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture *img) {
   Clay_BeginLayout();
 
   CLAY({.id = CLAY_ID("outer-container"),
@@ -54,7 +56,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout() {
             },
         .backgroundColor = COLOR_BACKGROUND}) {
     HeaderBar();
-    ImageGrid(11);
+    ImageGrid(11, img);
     CLAY({
         .id = CLAY_ID("footer"),
         .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)}},
@@ -64,7 +66,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout() {
 
   return Clay_EndLayout();
 }
-
+SDL_Texture *img;
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   (void)argc;
   (void)argv;
@@ -115,7 +117,29 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   }
 
   state->rendererData.fonts[FONT_ID] = font;
+  img =
+      SDL_CreateTexture(state->rendererData.renderer, SDL_PIXELFORMAT_RGBA8888,
+                        SDL_TEXTUREACCESS_STATIC, 200, 200);
+  if (!img) {
+    SDL_Log("Failed to create texture: %s", SDL_GetError());
+    // handle error
+  }
+  int width2 = 200;
+  int height2 = 200;
+  Uint32 red =
+      0xFF0000FF; // RGBA (red, green, blue, alpha) – full red, full alpha
+  Uint32 *pixels = malloc(width2 * height2 * sizeof(Uint32));
 
+  if (!pixels) {
+    SDL_Log("Failed to allocate pixel buffer");
+    // handle error
+  }
+
+  // Fill buffer with red
+  for (int i = 0; i < width2 * height2; ++i) {
+    pixels[i] = red;
+  }
+  SDL_UpdateTexture(img, NULL, pixels, width2 * sizeof(Uint32));
   /* Initialize Clay */
   uint64_t totalMemorySize = Clay_MinMemorySize();
   Clay_Arena clayMemory = (Clay_Arena){.memory = SDL_malloc(totalMemorySize),
@@ -211,7 +235,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 SDL_AppResult SDL_AppIterate(void *appstate) {
   AppState *state = appstate;
 
-  Clay_RenderCommandArray render_commands = ClayImageSample_CreateLayout();
+  Clay_RenderCommandArray render_commands = ClayImageSample_CreateLayout(img);
 
   SDL_SetRenderDrawColor(state->rendererData.renderer, 0, 0, 0, 255);
   SDL_RenderClear(state->rendererData.renderer);
