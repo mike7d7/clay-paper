@@ -41,7 +41,7 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
                                    .chars = data->textToEdit};
 
   if (data->isPassword) {
-    char *masked = malloc(text.length);
+    char *masked = SDL_malloc(text.length);
     if (masked != NULL) {
       for (int i = 0; i < text.length; i++) {
         masked[i] = '*';

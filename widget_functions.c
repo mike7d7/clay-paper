@@ -1,4 +1,5 @@
 #include "widget_functions.h"
+#include "SDL3/SDL_stdinc.h"
 #include "clay.h"
 #include <SDL3/SDL.h>
 #include <stdint.h>
@@ -34,7 +35,7 @@ void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
                                intptr_t userData) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
     Clay_ElementData element_data = Clay_GetElementData(id);
-    SDL_Rect *element_area = malloc(sizeof(SDL_Rect));
+    SDL_Rect *element_area = SDL_malloc(sizeof(SDL_Rect));
     *element_area = (SDL_Rect){
         .x = element_data.boundingBox.x,
         .y = element_data.boundingBox.y,
