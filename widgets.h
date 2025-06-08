@@ -1,3 +1,4 @@
+#include "SDL3/SDL_render.h"
 #include "clay.h"
 #include "widget_functions.h"
 #include <SDL3/SDL.h>
@@ -211,7 +212,7 @@ void HeaderBar() {
 }
 
 int test_array[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-void ImageGrid(int array_size) {
+void ImageGrid(SDL_Texture **img) {
   CLAY({.id = CLAY_ID("image_grid"),
         .clip = {.vertical = true, .childOffset = Clay_GetScrollOffset()},
         .layout = {.sizing = {CLAY_SIZING_GROW(), CLAY_SIZING_GROW()},
@@ -220,17 +221,21 @@ void ImageGrid(int array_size) {
                    .padding = {16, 16, 0, 0},
                    .childAlignment = {.x = CLAY_ALIGN_X_CENTER}},
         .backgroundColor = COLOR_BACKGROUND}) {
-    for (int i = 0; i < array_size; i += 3) {
+    int index = 0;
+    for (int i = 0; i < number_of_images; i += 3) {
       CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIT(),
                                   .width = CLAY_SIZING_FIT()},
                        .layoutDirection = CLAY_LEFT_TO_RIGHT,
-                       .childGap = 16},
+                       .childGap = 16,
+                       .childAlignment = {.y = CLAY_ALIGN_Y_CENTER}},
             .backgroundColor = COLOR_BACKGROUND}) {
-        for (int j = 0; j < 3 && i + j < array_size; j++) {
-          CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIXED(200),
-                                      .width = CLAY_SIZING_FIXED(200)}},
-                .backgroundColor = COLOR_CATPPUCCIN_GREEN,
+        for (int j = 0; j < 3 && i + j < number_of_images; j++) {
+          CLAY({.layout = {.sizing = {.width = CLAY_SIZING_FIXED(200),
+                                      .height = CLAY_SIZING_FIXED(200)}},
+                .aspectRatio = {(float)img[index]->w / img[index]->h},
+                .image = {.imageData = img[index]},
                 .border = (i == 0 && j == 0) ? image_border : image_no_border});
+          index++;
         }
       };
     }
