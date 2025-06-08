@@ -230,6 +230,11 @@ void ImageGrid(SDL_Texture **img) {
                        .childAlignment = {.y = CLAY_ALIGN_Y_CENTER}},
             .backgroundColor = COLOR_BACKGROUND}) {
         for (int j = 0; j < 3 && i + j < number_of_images; j++) {
+          if (SDL_strncmp(files[index], ".", 1) == 0 &&
+              !(config_options & 1 << 3)) {
+            index++;
+            continue;
+          }
           CLAY({.layout = {.sizing = {.width = CLAY_SIZING_FIXED(200),
                                       .height = CLAY_SIZING_FIXED(200)}},
                 .aspectRatio = {(float)img[index]->w / img[index]->h},

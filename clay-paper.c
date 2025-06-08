@@ -120,8 +120,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   state->rendererData.fonts[FONT_ID] = font;
   // Load images and related stuff
   char *folder_path = argv[1]; // folder is 1st argument
-  char **files = SDL_GlobDirectory(
-      folder_path, "*.*", 0, &number_of_images); // currently ignores subfolders
+  files = SDL_GlobDirectory(folder_path, "*.*", 0,
+                            &number_of_images); // currently ignores subfolders
   img = SDL_malloc(sizeof(SDL_Texture *) * number_of_images);
   for (int i = 0; i < number_of_images; i++) {
     int path_length = strlen(folder_path) + strlen(files[i]) + 1;
