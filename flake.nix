@@ -91,6 +91,7 @@
                     sdl3
                     sdl3-ttf
                     sdl3-image
+                    cargo-flamegraph
                   ]
                   ++ (if system == "aarch64-darwin" then [ ] else [ lldb ]);
               };
