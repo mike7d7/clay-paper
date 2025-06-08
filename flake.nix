@@ -40,7 +40,7 @@
               sdl3-image
             ];
             buildPhase = ''
-              clang clay-paper.c widget_functions.c -o clay-paper `pkg-config --libs --cflags sdl3 sdl3-ttf`
+              clang clay-paper.c widget_functions.c -o clay-paper `pkg-config --libs --cflags sdl3 sdl3-ttf sdl3-image` -O3
             '';
             installPhase = ''
               mkdir -p $out/bin
