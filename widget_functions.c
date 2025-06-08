@@ -10,6 +10,7 @@ SDL_Event start_text_edit;
 SDL_Event end_text_edit;
 bool editing_text = false;
 uint32_t config_options = 1;
+int number_of_images = 0;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),

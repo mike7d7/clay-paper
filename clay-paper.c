@@ -1,4 +1,6 @@
 #include "SDL3/SDL_mouse.h"
+#include "SDL3/SDL_render.h"
+#include "SDL3_image/SDL_image.h"
 #include <string.h>
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL.h>
@@ -41,7 +43,7 @@ void HandleClayErrors(Clay_ErrorData errorData) {
   printf("%s", errorData.errorText.chars);
 }
 
-Clay_RenderCommandArray ClayImageSample_CreateLayout() {
+Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture **img) {
   Clay_BeginLayout();
 
   CLAY({.id = CLAY_ID("outer-container"),
@@ -54,7 +56,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout() {
             },
         .backgroundColor = COLOR_BACKGROUND}) {
     HeaderBar();
-    ImageGrid(11);
+    ImageGrid(img);
     CLAY({
         .id = CLAY_ID("footer"),
         .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)}},
@@ -64,7 +66,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout() {
 
   return Clay_EndLayout();
 }
-
+SDL_Texture **img;
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   (void)argc;
   (void)argv;
@@ -115,6 +117,19 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   }
 
   state->rendererData.fonts[FONT_ID] = font;
+  // Load images and related stuff
+  char *folder_path = argv[1]; // folder is 1st argument
+  char **files = SDL_GlobDirectory(
+      folder_path, "*.*", 0, &number_of_images); // currently ignores subfolders
+  img = malloc(sizeof(SDL_Texture *) * number_of_images);
+  for (int i = 0; i < number_of_images; i++) {
+    int path_length = strlen(folder_path) + strlen(files[i]) + 1;
+    char *img_path = malloc(path_length);
+    snprintf(img_path, path_length, "%s%s", folder_path, files[i]);
+    printf("%s\n", img_path);
+    img[i] = IMG_LoadTexture(state->rendererData.renderer, img_path);
+    free(img_path);
+  }
 
   /* Initialize Clay */
   uint64_t totalMemorySize = Clay_MinMemorySize();
@@ -211,7 +226,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 SDL_AppResult SDL_AppIterate(void *appstate) {
   AppState *state = appstate;
 
-  Clay_RenderCommandArray render_commands = ClayImageSample_CreateLayout();
+  Clay_RenderCommandArray render_commands = ClayImageSample_CreateLayout(img);
 
   SDL_SetRenderDrawColor(state->rendererData.renderer, 0, 0, 0, 255);
   SDL_RenderClear(state->rendererData.renderer);

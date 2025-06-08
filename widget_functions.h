@@ -15,6 +15,7 @@ extern char empty_buffer[];
 extern TextEditData default_data;
 extern bool editing_text;
 extern uint32_t config_options;
+extern int number_of_images;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,
