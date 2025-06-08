@@ -43,7 +43,7 @@ void HandleClayErrors(Clay_ErrorData errorData) {
   printf("%s", errorData.errorText.chars);
 }
 
-Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture *img) {
+Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture **img) {
   Clay_BeginLayout();
 
   CLAY({.id = CLAY_ID("outer-container"),
@@ -56,7 +56,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture *img) {
             },
         .backgroundColor = COLOR_BACKGROUND}) {
     HeaderBar();
-    ImageGrid(11, img);
+    ImageGrid(img);
     CLAY({
         .id = CLAY_ID("footer"),
         .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)}},
@@ -66,7 +66,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture *img) {
 
   return Clay_EndLayout();
 }
-SDL_Texture *img;
+SDL_Texture **img;
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   (void)argc;
   (void)argv;
@@ -117,8 +117,19 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   }
 
   state->rendererData.fonts[FONT_ID] = font;
-  img = IMG_LoadTexture(state->rendererData.renderer,
-                        "/home/mig/Images/.w/1-default.JPG");
+  // Load images and related stuff
+  char *folder_path = argv[1]; // folder is 1st argument
+  char **files = SDL_GlobDirectory(
+      folder_path, "*.*", 0, &number_of_images); // currently ignores subfolders
+  img = malloc(sizeof(SDL_Texture *) * number_of_images);
+  for (int i = 0; i < number_of_images; i++) {
+    int path_length = strlen(folder_path) + strlen(files[i]) + 1;
+    char *img_path = malloc(path_length);
+    snprintf(img_path, path_length, "%s%s", folder_path, files[i]);
+    printf("%s\n", img_path);
+    img[i] = IMG_LoadTexture(state->rendererData.renderer, img_path);
+    free(img_path);
+  }
 
   /* Initialize Clay */
   uint64_t totalMemorySize = Clay_MinMemorySize();
