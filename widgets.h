@@ -221,14 +221,15 @@ void ImageGrid(SDL_Texture **img) {
                    .childAlignment = {.x = CLAY_ALIGN_X_CENTER}},
         .backgroundColor = COLOR_BACKGROUND}) {
     int index = 0;
-    for (int i = 0; i < number_of_images; i += 3) {
+    int rendered_images = 0;
+    while (index < number_of_images) {
       CLAY({.layout = {.sizing = {.height = CLAY_SIZING_FIT(),
                                   .width = CLAY_SIZING_FIT()},
                        .layoutDirection = CLAY_LEFT_TO_RIGHT,
                        .childGap = 16,
                        .childAlignment = {.y = CLAY_ALIGN_Y_CENTER}},
             .backgroundColor = COLOR_BACKGROUND}) {
-        for (int j = 0; j < 3 && i + j < number_of_images; j++) {
+        while (index < number_of_images) {
           if (SDL_strncmp(files[index], ".", 1) == 0 &&
               !(config_options & 1 << 3)) {
             index++;
@@ -238,8 +239,12 @@ void ImageGrid(SDL_Texture **img) {
                                       .height = CLAY_SIZING_FIXED(200)}},
                 .aspectRatio = {(float)img[index]->w / img[index]->h},
                 .image = {.imageData = img[index]},
-                .border = (i == 0 && j == 0) ? image_border : image_no_border});
+                .border = (index == 0) ? image_border : image_no_border});
           index++;
+          rendered_images++;
+          if(rendered_images % 3 == 0) {
+              break;
+          }
         }
       };
     }
