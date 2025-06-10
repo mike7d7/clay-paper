@@ -3,6 +3,7 @@
 #include "clay.h"
 #include <SDL3/SDL.h>
 #include <stdint.h>
+#include <unistd.h>
 
 char empty_buffer[1024];
 bool text_input_initialized = false;
@@ -14,6 +15,7 @@ uint32_t config_options = 1;
 int number_of_images = 0;
 char **files = NULL;
 uint_fast32_t selected_image = 0;
+char *folder_path;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
@@ -81,5 +83,21 @@ void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
                     intptr_t index) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
     selected_image = index;
+    int path_length = strlen(folder_path) + strlen(files[index]) + 1;
+    char *img_path = SDL_malloc(path_length);
+    SDL_snprintf(img_path, path_length, "%s%s", folder_path, files[index]);
+    char *argument_list[] = {"swww",   "img",
+                             img_path, "--transition-type",
+                             "wipe",   "--transition-step",
+                             "255",    "--transition-angle",
+                             "30",     "--transition-duration",
+                             "2",      "--transition-fps",
+                             "240",    NULL};
+
+    if (fork() == 0) {
+      execvp("swww", argument_list);
+    } else {
+      free(img_path);
+    }
   }
 }

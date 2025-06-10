@@ -18,6 +18,7 @@ extern uint32_t config_options;
 extern int number_of_images;
 extern char **files;
 extern uint_fast32_t selected_image;
+extern char* folder_path;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,
