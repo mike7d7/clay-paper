@@ -13,6 +13,7 @@ bool editing_text = false;
 uint32_t config_options = 1;
 int number_of_images = 0;
 char **files = NULL;
+uint_fast32_t selected_image = 0;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
@@ -73,5 +74,12 @@ void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
                          int config) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
     config_options ^= 1 << config;
+  }
+}
+
+void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
+                    intptr_t index) {
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    selected_image = index;
   }
 }

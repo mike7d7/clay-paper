@@ -17,6 +17,7 @@ extern bool editing_text;
 extern uint32_t config_options;
 extern int number_of_images;
 extern char **files;
+extern uint_fast32_t selected_image;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,
@@ -24,3 +25,4 @@ void HandleTextEditInteraction(Clay_ElementId elementId,
 void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleClearButton(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data, int config);
+void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data, intptr_t index);

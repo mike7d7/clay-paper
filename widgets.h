@@ -239,11 +239,14 @@ void ImageGrid(SDL_Texture **img) {
                                       .height = CLAY_SIZING_FIXED(200)}},
                 .aspectRatio = {(float)img[index]->w / img[index]->h},
                 .image = {.imageData = img[index]},
-                .border = (index == 0) ? image_border : image_no_border});
+                .border = (index == selected_image) ? image_border
+                                                    : image_no_border}) {
+            Clay_OnHover(HandleImgClick, index);
+          };
           index++;
           rendered_images++;
-          if(rendered_images % 3 == 0) {
-              break;
+          if (rendered_images % 3 == 0) {
+            break;
           }
         }
       };
