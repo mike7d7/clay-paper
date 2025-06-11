@@ -1,6 +1,12 @@
 #include "clay.h"
 #include <stdint.h>
 
+#define SHOW_GIFS_ONLY (1 << 0)
+#define SHOW_SUBFOLDERS (1 << 1)
+#define SHOW_ALL_SUBFOLDERS (1 << 2)
+#define SHOW_HIDDEN (1 << 3)
+#define SHOW_PATH_IN_TOOLTIP (1 << 4)
+
 typedef struct {
   Clay_String hintText;
   char *textToEdit;

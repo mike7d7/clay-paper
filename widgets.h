@@ -231,7 +231,7 @@ void ImageGrid(SDL_Texture **img) {
             .backgroundColor = COLOR_BACKGROUND}) {
         while (index < number_of_images) {
           if (SDL_strncmp(files[index], ".", 1) == 0 &&
-              !(config_options & 1 << 3)) {
+              !(config_options & SHOW_HIDDEN)) {
             index++;
             continue;
           }
