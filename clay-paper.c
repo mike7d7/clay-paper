@@ -205,6 +205,30 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
       if (event->key.key == SDLK_ESCAPE) {
         ret_val = SDL_APP_SUCCESS;
       }
+      if (event->key.scancode == SDL_SCANCODE_H) {
+        if (selected_image > 0) {
+          selected_image--;
+        }
+      }
+      if (event->key.scancode == SDL_SCANCODE_J) {
+        if (selected_image < number_of_images - 4) {
+          selected_image += 3;
+        } else {
+          selected_image = number_of_images - 1;
+        }
+      }
+      if (event->key.scancode == SDL_SCANCODE_K) {
+        if (selected_image > 2) {
+          selected_image -= 3;
+        } else {
+          selected_image = 0;
+        }
+      }
+      if (event->key.scancode == SDL_SCANCODE_L) {
+        if (selected_image < number_of_images - 1) {
+          selected_image++;
+        }
+      }
     }
     break;
   case SDL_EVENT_TEXT_EDITING:
