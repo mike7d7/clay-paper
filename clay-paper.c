@@ -1,3 +1,4 @@
+#include "SDL3/SDL_keycode.h"
 #include "SDL3/SDL_mouse.h"
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_stdinc.h"
@@ -205,26 +206,29 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
       if (event->key.key == SDLK_ESCAPE) {
         ret_val = SDL_APP_SUCCESS;
       }
-      if (event->key.scancode == SDL_SCANCODE_H) {
+      if (event->key.scancode == SDL_SCANCODE_H ||
+          event->key.key == SDLK_LEFT) {
         if (selected_image > 0) {
           selected_image--;
         }
       }
-      if (event->key.scancode == SDL_SCANCODE_J) {
+      if (event->key.scancode == SDL_SCANCODE_J ||
+          event->key.key == SDLK_DOWN) {
         if (selected_image < number_of_images - 4) {
           selected_image += 3;
         } else {
           selected_image = number_of_images - 1;
         }
       }
-      if (event->key.scancode == SDL_SCANCODE_K) {
+      if (event->key.scancode == SDL_SCANCODE_K || event->key.key == SDLK_UP) {
         if (selected_image > 2) {
           selected_image -= 3;
         } else {
           selected_image = 0;
         }
       }
-      if (event->key.scancode == SDL_SCANCODE_L) {
+      if (event->key.scancode == SDL_SCANCODE_L ||
+          event->key.key == SDLK_RIGHT) {
         if (selected_image < number_of_images - 1) {
           selected_image++;
         }
