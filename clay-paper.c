@@ -233,6 +233,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
           selected_image++;
         }
       }
+      if ((event->key.mod & SDL_KMOD_CTRL) && event->key.key == SDLK_H) {
+        config_options ^= SHOW_HIDDEN;
+      }
     }
     break;
   case SDL_EVENT_TEXT_EDITING:
