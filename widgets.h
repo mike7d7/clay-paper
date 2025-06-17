@@ -239,9 +239,13 @@ void ImageGrid(SDL_Texture **img) {
                                       .height = CLAY_SIZING_FIXED(200)}},
                 .aspectRatio = {(float)img[index]->w / img[index]->h},
                 .image = {.imageData = img[index]},
-                .border = (index == selected_image) ? image_border
-                                                    : image_no_border}) {
-            Clay_OnHover(HandleImgClick, index);
+                .border = (rendered_images == selected_image)
+                              ? image_border
+                              : image_no_border}) {
+            Indexes *indexes = malloc(sizeof(Indexes));
+            indexes->image_list = index;
+            indexes->rendered_images = rendered_images;
+            Clay_OnHover(HandleImgClick, (intptr_t)indexes);
           };
           index++;
           rendered_images++;

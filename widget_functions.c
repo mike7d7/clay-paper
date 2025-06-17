@@ -16,6 +16,7 @@ int number_of_images = 0;
 char **files = NULL;
 uint_fast32_t selected_image = 0;
 char *folder_path;
+uint_fast32_t non_hidden_imgs = 0;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
@@ -81,11 +82,14 @@ void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
 
 void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
                     intptr_t index) {
+  Indexes *indexes = (Indexes *)index;
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-    selected_image = index;
-    int path_length = strlen(folder_path) + strlen(files[index]) + 1;
+    selected_image = indexes->rendered_images;
+    int path_length =
+        strlen(folder_path) + strlen(files[indexes->image_list]) + 1;
     char *img_path = SDL_malloc(path_length);
-    SDL_snprintf(img_path, path_length, "%s%s", folder_path, files[index]);
+    SDL_snprintf(img_path, path_length, "%s%s", folder_path,
+                 files[indexes->image_list]);
     char *argument_list[] = {"swww",   "img",
                              img_path, "--transition-type",
                              "wipe",   "--transition-step",

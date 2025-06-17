@@ -3,6 +3,7 @@
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3_image/SDL_image.h"
+#include <stdint.h>
 #include <string.h>
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL.h>
@@ -124,6 +125,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
                             &number_of_images); // currently ignores subfolders
   img = SDL_malloc(sizeof(SDL_Texture *) * number_of_images);
   for (int i = 0; i < number_of_images; i++) {
+    if (files[i][0] != '.') {
+      non_hidden_imgs++;
+    }
     int path_length = strlen(folder_path) + strlen(files[i]) + 1;
     char *img_path = SDL_malloc(path_length);
     SDL_snprintf(img_path, path_length, "%s%s", folder_path, files[i]);
@@ -151,6 +155,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   AppState *state = appstate;
   SDL_AppResult ret_val = SDL_APP_CONTINUE;
+  uint_fast32_t shown_images;
 
   switch (event->type) {
   case SDL_EVENT_QUIT:
@@ -190,6 +195,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     strcat(empty_buffer, event->text.text);
     break;
   case SDL_EVENT_KEY_DOWN:
+    shown_images =
+        (config_options & SHOW_HIDDEN) ? number_of_images : non_hidden_imgs;
     if (editing_text) {
       if (event->key.key == SDLK_ESCAPE || event->key.key == SDLK_RETURN) {
         SDL_StopTextInput(state->window);
@@ -213,10 +220,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
       }
       if (event->key.scancode == SDL_SCANCODE_J ||
           event->key.key == SDLK_DOWN) {
-        if (selected_image < number_of_images - 4) {
+        if (selected_image < shown_images - 4) {
           selected_image += 3;
         } else {
-          selected_image = number_of_images - 1;
+          selected_image = shown_images - 1;
         }
       }
       if (event->key.scancode == SDL_SCANCODE_K || event->key.key == SDLK_UP) {
@@ -228,7 +235,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
       }
       if (event->key.scancode == SDL_SCANCODE_L ||
           event->key.key == SDLK_RIGHT) {
-        if (selected_image < number_of_images - 1) {
+        if (selected_image < shown_images - 1) {
           selected_image++;
         }
       }

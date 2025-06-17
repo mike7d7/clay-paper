@@ -15,6 +15,11 @@ typedef struct {
   bool disable;
 } TextEditData;
 
+typedef struct {
+  int image_list;
+  int rendered_images;
+} Indexes;
+
 // Size of 'empty_buffer' is the maxLength of the string - 1 (space for null
 // terminator).
 extern char empty_buffer[];
@@ -25,6 +30,7 @@ extern int number_of_images;
 extern char **files;
 extern uint_fast32_t selected_image;
 extern char* folder_path;
+extern uint_fast32_t non_hidden_imgs;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,
