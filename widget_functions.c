@@ -80,28 +80,30 @@ void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
   }
 }
 
+void updateImg(int rendered_images, int image_list) {
+  selected_image = rendered_images;
+  int path_length = strlen(folder_path) + strlen(files[image_list]) + 1;
+  char *img_path = SDL_malloc(path_length);
+  SDL_snprintf(img_path, path_length, "%s%s", folder_path, files[image_list]);
+  char *argument_list[] = {"swww",   "img",
+                           img_path, "--transition-type",
+                           "wipe",   "--transition-step",
+                           "255",    "--transition-angle",
+                           "30",     "--transition-duration",
+                           "2",      "--transition-fps",
+                           "240",    NULL};
+
+  if (fork() == 0) {
+    execvp("swww", argument_list);
+  } else {
+    free(img_path);
+  }
+}
+
 void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
                     intptr_t index) {
   Indexes *indexes = (Indexes *)index;
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
-    selected_image = indexes->rendered_images;
-    int path_length =
-        strlen(folder_path) + strlen(files[indexes->image_list]) + 1;
-    char *img_path = SDL_malloc(path_length);
-    SDL_snprintf(img_path, path_length, "%s%s", folder_path,
-                 files[indexes->image_list]);
-    char *argument_list[] = {"swww",   "img",
-                             img_path, "--transition-type",
-                             "wipe",   "--transition-step",
-                             "255",    "--transition-angle",
-                             "30",     "--transition-duration",
-                             "2",      "--transition-fps",
-                             "240",    NULL};
-
-    if (fork() == 0) {
-      execvp("swww", argument_list);
-    } else {
-      free(img_path);
-    }
+    updateImg(indexes->rendered_images, indexes->image_list);
   }
 }

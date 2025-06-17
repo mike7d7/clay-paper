@@ -21,6 +21,7 @@
 #define NUMBER_OF_FONTS 1
 
 static const Uint32 FONT_ID = 0;
+int rendered_to_list[];
 
 typedef struct app_state {
   SDL_Window *window;
@@ -126,6 +127,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   img = SDL_malloc(sizeof(SDL_Texture *) * number_of_images);
   for (int i = 0; i < number_of_images; i++) {
     if (files[i][0] != '.') {
+      rendered_to_list[non_hidden_imgs] = i;
       non_hidden_imgs++;
     }
     int path_length = strlen(folder_path) + strlen(files[i]) + 1;
@@ -241,6 +243,11 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
       }
       if ((event->key.mod & SDL_KMOD_CTRL) && event->key.key == SDLK_H) {
         config_options ^= SHOW_HIDDEN;
+      }
+      if (event->key.key == SDLK_RETURN) {
+        updateImg(selected_image, (config_options & SHOW_HIDDEN)
+                                      ? selected_image
+                                      : rendered_to_list[selected_image]);
       }
     }
     break;

@@ -38,4 +38,5 @@ void HandleTextEditInteraction(Clay_ElementId elementId,
 void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleClearButton(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data, int config);
+void updateImg(int rendered_images, int image_list);
 void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data, intptr_t index);
