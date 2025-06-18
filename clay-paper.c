@@ -19,6 +19,7 @@
 #include "widgets.h"
 
 #define NUMBER_OF_FONTS 1
+#define SCROLL_SENSITIVITY 3 // The higher, the more it scrolls
 
 static const Uint32 FONT_ID = 0;
 int *rendered_to_list;
@@ -182,7 +183,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     break;
   case SDL_EVENT_MOUSE_WHEEL:
     Clay_UpdateScrollContainers(
-        true, (Clay_Vector2){event->wheel.x, event->wheel.y}, 0.01f);
+        true,
+        (Clay_Vector2){event->wheel.x, event->wheel.y * SCROLL_SENSITIVITY},
+        0.01f);
     break;
   case SDL_EVENT_USER: // start_text_edit
     SDL_StartTextInput(state->window);
