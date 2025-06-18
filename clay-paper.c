@@ -21,7 +21,7 @@
 #define NUMBER_OF_FONTS 1
 
 static const Uint32 FONT_ID = 0;
-int rendered_to_list[];
+int *rendered_to_list;
 
 typedef struct app_state {
   SDL_Window *window;
@@ -125,6 +125,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   files = SDL_GlobDirectory(folder_path, "*.*", 0,
                             &number_of_images); // currently ignores subfolders
   img = SDL_malloc(sizeof(SDL_Texture *) * number_of_images);
+  rendered_to_list = (int *)SDL_malloc(sizeof(int) * number_of_images);
   for (int i = 0; i < number_of_images; i++) {
     if (files[i][0] != '.') {
       rendered_to_list[non_hidden_imgs] = i;
