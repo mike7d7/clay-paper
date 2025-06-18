@@ -2,9 +2,6 @@
 #include "clay.h"
 #include "widget_functions.h"
 #include <SDL3/SDL.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
 
 const int FONT_ID_BODY_16 = 0;
 const Clay_Color COLOR_WHITE = {255, 255, 255, 255};
@@ -242,7 +239,7 @@ void ImageGrid(SDL_Texture **img) {
                 .border = (rendered_images == selected_image)
                               ? image_border
                               : image_no_border}) {
-            Indexes *indexes = malloc(sizeof(Indexes));
+            Indexes *indexes = SDL_malloc(sizeof(Indexes));
             indexes->image_list = index;
             indexes->rendered_images = rendered_images;
             Clay_OnHover(HandleImgClick, (intptr_t)indexes);
