@@ -1,6 +1,7 @@
 #include "SDL3/SDL_keycode.h"
 #include "SDL3/SDL_mouse.h"
 #include "SDL3/SDL_render.h"
+#include "SDL3/SDL_scancode.h"
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3_image/SDL_image.h"
 #include <stdint.h>
@@ -215,7 +216,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         }
       }
     } else {
-      if (event->key.key == SDLK_ESCAPE) {
+      if (event->key.key == SDLK_ESCAPE ||
+          event->key.scancode == SDL_SCANCODE_Q) {
         ret_val = SDL_APP_SUCCESS;
       }
       if (event->key.scancode == SDL_SCANCODE_H ||
