@@ -151,6 +151,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   Clay_Initialize(clayMemory, (Clay_Dimensions){(float)width, (float)height},
                   (Clay_ErrorHandler){HandleClayErrors});
   Clay_SetMeasureTextFunction(SDL_MeasureText, state->rendererData.fonts);
+  Clay_SetDebugModeEnabled(false);
 
   InitializeCustomEvents();
   *appstate = state;
@@ -224,6 +225,14 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
           event->key.key == SDLK_LEFT) {
         if (selected_image > 0) {
           selected_image--;
+          Clay_ScrollContainerData scroll_data =
+              Clay_GetScrollContainerData(CLAY_ID("image_grid"));
+          Clay_ElementData element_data = Clay_GetElementData(
+              CLAY_IDI("image_row", (int)selected_image / 3));
+          if (element_data.boundingBox.y < 0) {
+            scroll_data.scrollPosition->y +=
+                element_data.boundingBox.height + 16;
+          }
         }
       }
       if (event->key.scancode == SDL_SCANCODE_J ||
@@ -233,6 +242,14 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         } else {
           selected_image = shown_images - 1;
         }
+        Clay_ScrollContainerData scroll_data =
+            Clay_GetScrollContainerData(CLAY_ID("image_grid"));
+        Clay_ElementData element_data =
+            Clay_GetElementData(CLAY_IDI("image_row", (int)selected_image / 3));
+        if (element_data.boundingBox.y + element_data.boundingBox.height >
+            scroll_data.scrollContainerDimensions.height + 63) {
+          scroll_data.scrollPosition->y -= element_data.boundingBox.height + 16;
+        }
       }
       if (event->key.scancode == SDL_SCANCODE_K || event->key.key == SDLK_UP) {
         if (selected_image > 2) {
@@ -240,11 +257,27 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         } else {
           selected_image = 0;
         }
+        Clay_ScrollContainerData scroll_data =
+            Clay_GetScrollContainerData(CLAY_ID("image_grid"));
+        Clay_ElementData element_data =
+            Clay_GetElementData(CLAY_IDI("image_row", (int)selected_image / 3));
+        if (element_data.boundingBox.y < 0) {
+          scroll_data.scrollPosition->y += element_data.boundingBox.height + 16;
+        }
       }
       if (event->key.scancode == SDL_SCANCODE_L ||
           event->key.key == SDLK_RIGHT) {
         if (selected_image < shown_images - 1) {
           selected_image++;
+          Clay_ScrollContainerData scroll_data =
+              Clay_GetScrollContainerData(CLAY_ID("image_grid"));
+          Clay_ElementData element_data = Clay_GetElementData(
+              CLAY_IDI("image_row", (int)selected_image / 3));
+          if (element_data.boundingBox.y + element_data.boundingBox.height >
+              scroll_data.scrollContainerDimensions.height + 63) {
+            scroll_data.scrollPosition->y -=
+                element_data.boundingBox.height + 16;
+          }
         }
       }
       if ((event->key.mod & SDL_KMOD_CTRL) && event->key.key == SDLK_H) {
