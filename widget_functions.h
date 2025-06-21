@@ -29,14 +29,17 @@ extern uint32_t config_options;
 extern int number_of_images;
 extern char **files;
 extern uint_fast32_t selected_image;
-extern char* folder_path;
+extern char *folder_path;
 extern uint_fast32_t non_hidden_imgs;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,
-                               Clay_PointerData pointer_data, intptr_t userData);
+                               Clay_PointerData pointer_data,
+                               intptr_t userData);
 void HandleExitButton(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleClearButton(Clay_ElementId id, Clay_PointerData pointer_data);
-void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data, int config);
+void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
+                         int config);
 void updateImg(int rendered_images, int image_list);
-void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data, intptr_t index);
+void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
+                    intptr_t index);
