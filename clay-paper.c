@@ -162,6 +162,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   AppState *state = appstate;
   SDL_AppResult ret_val = SDL_APP_CONTINUE;
   uint_fast32_t shown_images;
+  Clay_ScrollContainerData scroll_data =
+      Clay_GetScrollContainerData(CLAY_ID("image_grid"));
 
   switch (event->type) {
   case SDL_EVENT_QUIT:
@@ -225,8 +227,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
           event->key.key == SDLK_LEFT) {
         if (selected_image > 0) {
           selected_image--;
-          Clay_ScrollContainerData scroll_data =
-              Clay_GetScrollContainerData(CLAY_ID("image_grid"));
           Clay_ElementData element_data = Clay_GetElementData(
               CLAY_IDI("image_row", (int)selected_image / 3));
           if (element_data.boundingBox.y < 0) {
@@ -242,8 +242,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         } else {
           selected_image = shown_images - 1;
         }
-        Clay_ScrollContainerData scroll_data =
-            Clay_GetScrollContainerData(CLAY_ID("image_grid"));
         Clay_ElementData element_data =
             Clay_GetElementData(CLAY_IDI("image_row", (int)selected_image / 3));
         if (element_data.boundingBox.y + element_data.boundingBox.height >
@@ -257,8 +255,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         } else {
           selected_image = 0;
         }
-        Clay_ScrollContainerData scroll_data =
-            Clay_GetScrollContainerData(CLAY_ID("image_grid"));
         Clay_ElementData element_data =
             Clay_GetElementData(CLAY_IDI("image_row", (int)selected_image / 3));
         if (element_data.boundingBox.y < 0) {
@@ -269,8 +265,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
           event->key.key == SDLK_RIGHT) {
         if (selected_image < shown_images - 1) {
           selected_image++;
-          Clay_ScrollContainerData scroll_data =
-              Clay_GetScrollContainerData(CLAY_ID("image_grid"));
           Clay_ElementData element_data = Clay_GetElementData(
               CLAY_IDI("image_row", (int)selected_image / 3));
           if (element_data.boundingBox.y + element_data.boundingBox.height >
@@ -281,7 +275,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         }
       }
       if ((event->key.mod & SDL_KMOD_CTRL) && event->key.key == SDLK_H) {
+        selected_image = 0;
         config_options ^= SHOW_HIDDEN;
+        scroll_data.scrollPosition->y = 0;
       }
       if (event->key.key == SDLK_RETURN) {
         updateImg(selected_image, (config_options & SHOW_HIDDEN)
