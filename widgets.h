@@ -222,7 +222,7 @@ void ImageGrid(SDL_Texture **img) {
     while (index < number_of_images) {
       CLAY({.id = CLAY_IDI("image_row", (int)index / 3),
             .layout = {.sizing = {.height = CLAY_SIZING_FIT(),
-                                  .width = CLAY_SIZING_FIT()},
+                                  .width = CLAY_SIZING_FIXED(632)},
                        .layoutDirection = CLAY_LEFT_TO_RIGHT,
                        .childGap = 16,
                        .childAlignment = {.y = CLAY_ALIGN_Y_CENTER}},
@@ -250,16 +250,6 @@ void ImageGrid(SDL_Texture **img) {
           rendered_images++;
           if (rendered_images % 3 == 0) {
             break;
-          }
-        }
-        if (index >= number_of_images && rendered_images % 3 != 0) {
-          int empty_images = 3 - (rendered_images % 3);
-          while (empty_images != 0) {
-            CLAY({
-                .layout = {.sizing = {.width = CLAY_SIZING_FIXED(200),
-                                      .height = CLAY_SIZING_FIXED(200)}},
-            });
-            empty_images--;
           }
         }
       };
