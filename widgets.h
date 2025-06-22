@@ -252,6 +252,16 @@ void ImageGrid(SDL_Texture **img) {
             break;
           }
         }
+        if (index >= number_of_images && rendered_images % 3 != 0) {
+          int empty_images = 3 - (rendered_images % 3);
+          while (empty_images != 0) {
+            CLAY({
+                .layout = {.sizing = {.width = CLAY_SIZING_FIXED(200),
+                                      .height = CLAY_SIZING_FIXED(200)}},
+            });
+            empty_images--;
+          }
+        }
       };
     }
   };
