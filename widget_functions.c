@@ -46,7 +46,7 @@ char *jf_concat(size_t n, ...) {
   for (i = 0; i < n; i++) {
     const char *string_from_arg = va_arg(ap, const char *);
     size_t arg_str_length = SDL_strlen(string_from_arg);
-    memcpy(tmp, string_from_arg, arg_str_length);
+    SDL_memcpy(tmp, string_from_arg, arg_str_length);
     tmp += arg_str_length;
   }
   buf[len] = '\0';
