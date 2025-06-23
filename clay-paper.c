@@ -133,9 +133,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
       rendered_to_list[non_hidden_imgs] = i;
       non_hidden_imgs++;
     }
-    int path_length = strlen(folder_path) + strlen(files[i]) + 1;
-    char *img_path = SDL_malloc(path_length);
-    SDL_snprintf(img_path, path_length, "%s%s", folder_path, files[i]);
+    char *img_path = jf_concat(2, folder_path, files[i]);
     printf("%s\n", img_path);
     img[i] = IMG_LoadTexture(state->rendererData.renderer, img_path);
     SDL_free(img_path);

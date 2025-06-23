@@ -24,6 +24,37 @@ TextEditData default_data = (TextEditData){
     .isPassword = false,
     .maxLength = sizeof(empty_buffer),
 };
+
+// Copied from jftui with minor modifications made.
+// https://github.com/Aanok/jftui/blob/master/src/shared.c
+char *jf_concat(size_t n, ...) {
+  char *buf;
+  char *tmp;
+  size_t len = 0;
+  size_t i;
+  va_list ap;
+
+  va_start(ap, n);
+  for (i = 0; i < n; i++) {
+    len += SDL_strlen(va_arg(ap, const char *));
+  }
+  va_end(ap);
+
+  buf = SDL_malloc(len + 1);
+  tmp = buf;
+  va_start(ap, n);
+  for (i = 0; i < n; i++) {
+    const char *string_from_arg = va_arg(ap, const char *);
+    size_t arg_str_length = SDL_strlen(string_from_arg);
+    memcpy(tmp, string_from_arg, arg_str_length);
+    tmp += arg_str_length;
+  }
+  buf[len] = '\0';
+  va_end(ap);
+
+  return buf;
+}
+
 void InitializeCustomEvents() {
   registered_event_type = SDL_RegisterEvents(2);
 

@@ -43,3 +43,4 @@ void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
 void updateImg(int rendered_images, int image_list);
 void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
                     intptr_t index);
+char *jf_concat(size_t n, ...);
