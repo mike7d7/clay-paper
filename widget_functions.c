@@ -113,9 +113,7 @@ void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
 
 void updateImg(int rendered_images, int image_list) {
   selected_image = rendered_images;
-  int path_length = strlen(folder_path) + strlen(files[image_list]) + 1;
-  char *img_path = SDL_malloc(path_length);
-  SDL_snprintf(img_path, path_length, "%s%s", folder_path, files[image_list]);
+  char *img_path = jf_concat(2, folder_path, files[image_list]);
   char *argument_list[] = {"swww",   "img",
                            img_path, "--transition-type",
                            "wipe",   "--transition-step",
