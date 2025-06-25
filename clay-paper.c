@@ -17,6 +17,7 @@
 #include <stdio.h>
 
 #include "clay_renderer_SDL3.c"
+#include "config.h"
 #include "widgets.h"
 
 #define NUMBER_OF_FONTS 1
@@ -153,6 +154,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
 
   InitializeCustomEvents();
   *appstate = state;
+
+  // Load configs
+  load_config();
   return SDL_APP_CONTINUE;
 }
 
