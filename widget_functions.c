@@ -11,7 +11,7 @@ Uint32 registered_event_type;
 SDL_Event start_text_edit;
 SDL_Event end_text_edit;
 bool editing_text = false;
-uint32_t config_options = 1;
+uint32_t config_options = 0;
 int number_of_images = 0;
 char **files = NULL;
 uint_fast32_t selected_image = 0;

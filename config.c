@@ -11,19 +11,21 @@ typedef struct {
 
 void read_config() {
   SDL_Storage *config_file = SDL_OpenUserStorage("mike7d7", "clay-paper", 0);
-  Config_Format test_conf;
   Uint64 filesize;
 
   SDL_GetStorageFileSize(config_file, "config", &filesize);
   void *buffer = SDL_malloc(filesize);
-  test_conf.imgs_path = SDL_malloc(filesize - sizeof(uint32_t));
-  SDL_ReadStorageFile(config_file, "config", buffer, filesize);
-  SDL_memcpy(&test_conf.config_int, buffer, sizeof(uint32_t));
-  SDL_memcpy(test_conf.imgs_path, buffer + sizeof(uint32_t),
-             filesize - sizeof(uint32_t));
 
+  if (SDL_ReadStorageFile(config_file, "config", buffer, filesize)) {
+    folder_path = SDL_malloc(filesize - sizeof(uint32_t));
+    SDL_memcpy(&config_options, buffer, sizeof(uint32_t));
+    SDL_memcpy(folder_path, buffer + sizeof(uint32_t),
+               filesize - sizeof(uint32_t));
+  } else {
+    config_options = 1;
+    folder_path = "";
+  }
   SDL_free(buffer);
-  SDL_free(test_conf.imgs_path);
 }
 
 void write_config() {
