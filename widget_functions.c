@@ -1,4 +1,6 @@
 #include "widget_functions.h"
+#include "SDL3/SDL_dialog.h"
+#include "SDL3/SDL_events.h"
 #include "SDL3/SDL_stdinc.h"
 #include "clay.h"
 #include <SDL3/SDL.h>
@@ -10,6 +12,7 @@ bool text_input_initialized = false;
 Uint32 registered_event_type;
 SDL_Event start_text_edit;
 SDL_Event end_text_edit;
+SDL_Event open_folder_dialog;
 bool editing_text = false;
 uint32_t config_options = 0;
 int number_of_images = 0;
@@ -56,7 +59,7 @@ char *jf_concat(size_t n, ...) {
 }
 
 void InitializeCustomEvents() {
-  registered_event_type = SDL_RegisterEvents(2);
+  registered_event_type = SDL_RegisterEvents(3);
 
   SDL_zero(start_text_edit);
   start_text_edit.type = registered_event_type;
@@ -65,6 +68,10 @@ void InitializeCustomEvents() {
   SDL_zero(end_text_edit);
   end_text_edit.type = registered_event_type + 1;
   end_text_edit.user.code = 2;
+
+  SDL_zero(open_folder_dialog);
+  open_folder_dialog.type = registered_event_type + 2;
+  open_folder_dialog.user.code = 3;
 }
 
 void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
@@ -134,5 +141,11 @@ void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
   Indexes *indexes = (Indexes *)index;
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
     updateImg(indexes->rendered_images, indexes->image_list);
+  }
+}
+
+void HandleFolder(Clay_ElementId id, Clay_PointerData pointer_data) {
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    SDL_PushEvent(&open_folder_dialog);
   }
 }

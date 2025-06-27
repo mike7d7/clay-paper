@@ -1,4 +1,7 @@
+#include "SDL3/SDL_dialog.h"
+#include "SDL3/SDL_events.h"
 #include "SDL3/SDL_keycode.h"
+#include "SDL3/SDL_log.h"
 #include "SDL3/SDL_mouse.h"
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_scancode.h"
@@ -160,6 +163,59 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   return SDL_APP_CONTINUE;
 }
 
+static void SDLCALL folder_dialog_callback(void *userdata,
+                                           const char *const *filelist,
+                                           int filter) {
+  AppState *state = userdata;
+  if (!filelist) {
+    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "An error occured: %s",
+                 SDL_GetError());
+    return;
+  } else if (!*filelist) {
+    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "The user did not select any file.");
+    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG,
+                 "Most likely, the dialog was canceled.");
+    return;
+  }
+
+  while (*filelist) {
+    SDL_free(files);
+    SDL_free(folder_path);
+    folder_path = SDL_malloc(SDL_strlen(*filelist) + 1);
+    SDL_strlcpy(folder_path, *filelist, SDL_strlen(*filelist) + 1);
+    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "Full path to selected file: '%s'",
+                 folder_path);
+    files =
+        SDL_GlobDirectory(folder_path, "*.*", 0,
+                          &number_of_images); // currently ignores subfolders
+    SDL_free(img);
+    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "number of images = %i",
+                 number_of_images);
+    SDL_free(rendered_to_list);
+    img = SDL_malloc(sizeof(SDL_Texture *) * number_of_images);
+    rendered_to_list = (int *)SDL_malloc(sizeof(int) * number_of_images);
+    non_hidden_imgs = 0;
+    for (int i = 0; i < number_of_images; i++) {
+      if (files[i][0] != '.') {
+        rendered_to_list[non_hidden_imgs] = i;
+        non_hidden_imgs++;
+      }
+      char *img_path = jf_concat(3, folder_path, "/", files[i]);
+      printf("%s\n", img_path);
+      img[i] = IMG_LoadTexture(state->rendererData.renderer, img_path);
+      SDL_free(img_path);
+    }
+    filelist++;
+  }
+
+  if (filter < 0) {
+    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG,
+                 "The current platform does not support fetching "
+                 "the selected filter, or the user did not select"
+                 " any filter.");
+  }
+}
+
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   AppState *state = appstate;
   SDL_AppResult ret_val = SDL_APP_CONTINUE;
@@ -202,6 +258,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   case SDL_EVENT_USER + 1: // end_text_edit
     SDL_StopTextInput(state->window);
     editing_text = false;
+    break;
+  case SDL_EVENT_USER + 2: // open_folder_dialog
+    SDL_ShowOpenFolderDialog(folder_dialog_callback, state, state->window, NULL,
+                             false);
     break;
   case SDL_EVENT_TEXT_INPUT:
     strcat(empty_buffer, event->text.text);
