@@ -1,5 +1,4 @@
 #include "widget_functions.h"
-#include "SDL3/SDL_dialog.h"
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_stdinc.h"
 #include "clay.h"
