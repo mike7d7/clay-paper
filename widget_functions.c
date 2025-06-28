@@ -120,7 +120,7 @@ void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
 
 void updateImg(int rendered_images, int image_list) {
   selected_image = rendered_images;
-  char *img_path = jf_concat(2, folder_path, files[image_list]);
+  char *img_path = jf_concat(3, folder_path, "/", files[image_list]);
   char *argument_list[] = {"swww",   "img",
                            img_path, "--transition-type",
                            "wipe",   "--transition-step",
