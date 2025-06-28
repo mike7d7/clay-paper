@@ -181,7 +181,7 @@ void HeaderBar() {
       .backgroundColor = COLOR_TRANSPARENT,
   }) {
     HeaderButton(CLAY_STRING("Folder"), CLAY_STRING("Folder"),
-                 HandleExitButton);
+                 HandleFolder);
     HorizontalSpacer();
     TextEditComponent(CLAY_STRING("search"), &default_data);
     HorizontalSpacer();
