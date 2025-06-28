@@ -206,6 +206,8 @@ static void SDLCALL folder_dialog_callback(void *userdata,
       SDL_free(img_path);
     }
     filelist++;
+    selected_image = 0;
+    Clay_GetScrollContainerData(CLAY_ID("image_grid")).scrollPosition->y = 0;
   }
 
   if (filter < 0) {
@@ -394,6 +396,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
   }
 
   AppState *state = appstate;
+  write_config();
 
   if (state) {
     if (state->rendererData.renderer)

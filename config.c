@@ -4,12 +4,7 @@
 #include "widget_functions.h"
 #include <stdint.h>
 
-typedef struct {
-  int config_int;
-  char *imgs_path;
-} Config_Format;
-
-void read_config() {
+void load_config() {
   SDL_Storage *config_file = SDL_OpenUserStorage("mike7d7", "clay-paper", 0);
   Uint64 filesize;
 
@@ -23,25 +18,19 @@ void read_config() {
                filesize - sizeof(uint32_t));
   } else {
     config_options = 1;
-    folder_path = "";
+    folder_path = SDL_malloc(0);
   }
   SDL_free(buffer);
 }
 
 void write_config() {
   SDL_Storage *config_file = SDL_OpenUserStorage("mike7d7", "clay-paper", 0);
-
-  Config_Format test_conf = {33, "helo from this universe 4"};
-  uint32_t strlen = SDL_strlen(test_conf.imgs_path);
+  uint32_t strlen = SDL_strlen(folder_path);
   void *buffer = SDL_malloc(sizeof(uint32_t) + strlen);
-  SDL_memcpy(buffer, &test_conf.config_int, sizeof(uint32_t));
-  SDL_memcpy((Uint8 *)buffer + sizeof(uint32_t), test_conf.imgs_path, strlen);
+
+  SDL_memcpy(buffer, &config_options, sizeof(uint32_t));
+  SDL_memcpy((Uint8 *)buffer + sizeof(uint32_t), folder_path, strlen);
   SDL_WriteStorageFile(config_file, "config", buffer,
                        sizeof(uint32_t) + strlen);
   SDL_free(buffer);
-}
-
-void load_config() {
-  write_config();
-  read_config();
 }
