@@ -6,6 +6,7 @@
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_scancode.h"
 #include "SDL3/SDL_stdinc.h"
+#include "SDL3/SDL_surface.h"
 #include "SDL3_image/SDL_image.h"
 #include <stdint.h>
 #include <string.h>
@@ -77,7 +78,47 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture **img) {
 
   return Clay_EndLayout();
 }
+
 SDL_Texture **img;
+
+void create_texture_atlas(AppState *state, SDL_Texture **imgs) {
+  uint_fast32_t height = number_of_images / 3;
+  height += (number_of_images % 3) ? 1 : 0;
+  height *= 200;
+
+  SDL_Texture *texture_atlas =
+      SDL_CreateTexture(state->rendererData.renderer, SDL_PIXELFORMAT_RGBA32,
+                        SDL_TEXTUREACCESS_TARGET, 600, height);
+  if (!SDL_SetRenderTarget(state->rendererData.renderer, texture_atlas)) {
+    SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                 "Error setting texture atlas as render target: %s",
+                 SDL_GetError());
+  } else {
+    for (int i = 0; i < number_of_images; i++) {
+      SDL_FRect position_in_atlas = {(i % 3) * 200,
+                                     SDL_floor((double)i / 3) * 200, 200, 200};
+      SDL_RenderTexture(state->rendererData.renderer, imgs[i], NULL,
+                        &position_in_atlas);
+    }
+    SDL_Surface *atlas_as_surface =
+        SDL_RenderReadPixels(state->rendererData.renderer, NULL);
+    if (atlas_as_surface) {
+      if (IMG_SavePNG(atlas_as_surface,
+                      "/home/mig/.local/share/mike7d7/clay-paper/cache.png")) {
+        SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "Texture atlas (cache) saved.");
+      } else {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                     "Error saving texture atlas to file: %s", SDL_GetError());
+      }
+    } else {
+      SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                   "Error locking texture as surface: %s", SDL_GetError());
+    }
+  }
+
+  SDL_SetRenderTarget(state->rendererData.renderer, NULL);
+}
+
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   (void)argc;
   (void)argv;
@@ -145,6 +186,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
     img[i] = IMG_LoadTexture(state->rendererData.renderer, img_path);
     SDL_free(img_path);
   }
+  create_texture_atlas(state, img);
 
   /* Initialize Clay */
   uint64_t totalMemorySize = Clay_MinMemorySize();
