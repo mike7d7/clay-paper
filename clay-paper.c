@@ -85,6 +85,11 @@ void create_texture_atlas(AppState *state, SDL_Texture **imgs) {
   uint_fast32_t height = number_of_images / 3;
   height += (number_of_images % 3) ? 1 : 0;
   height *= 200;
+  float image_width;
+  float image_height;
+  double scale_w;
+  double scale_h;
+  double scale;
 
   SDL_Texture *texture_atlas =
       SDL_CreateTexture(state->rendererData.renderer, SDL_PIXELFORMAT_RGBA32,
@@ -95,8 +100,15 @@ void create_texture_atlas(AppState *state, SDL_Texture **imgs) {
                  SDL_GetError());
   } else {
     for (int i = 0; i < number_of_images; i++) {
-      SDL_FRect position_in_atlas = {(i % 3) * 200,
-                                     SDL_floor((double)i / 3) * 200, 200, 200};
+      SDL_GetTextureSize(imgs[i], &image_width, &image_height);
+      scale_w = 200 / image_width;
+      scale_h = 200 / image_height;
+      scale = SDL_min(scale_w, scale_h);
+
+      SDL_FRect position_in_atlas = {
+          ((i % 3) * 200) + (200 - image_width * scale) / 2,
+          (SDL_floor((double)i / 3) * 200) + (200 - image_height * scale) / 2,
+          image_width * scale, image_height * scale};
       SDL_RenderTexture(state->rendererData.renderer, imgs[i], NULL,
                         &position_in_atlas);
     }
