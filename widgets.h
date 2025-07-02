@@ -180,8 +180,7 @@ void HeaderBar() {
                  .padding = {0, 0, 0, 0}},
       .backgroundColor = COLOR_TRANSPARENT,
   }) {
-    HeaderButton(CLAY_STRING("Folder"), CLAY_STRING("Folder"),
-                 HandleFolder);
+    HeaderButton(CLAY_STRING("Folder"), CLAY_STRING("Folder"), HandleFolder);
     HorizontalSpacer();
     TextEditComponent(CLAY_STRING("search"), &default_data);
     HorizontalSpacer();
@@ -208,7 +207,7 @@ void HeaderBar() {
   };
 }
 
-void ImageGrid(SDL_Texture **img) {
+void ImageGrid(SDL_Texture *img) {
   CLAY({.id = CLAY_ID("image_grid"),
         .clip = {.vertical = true, .childOffset = Clay_GetScrollOffset()},
         .layout = {.sizing = {CLAY_SIZING_GROW(), CLAY_SIZING_GROW()},
@@ -217,7 +216,7 @@ void ImageGrid(SDL_Texture **img) {
                    .padding = {16, 16, 0, 0},
                    .childAlignment = {.x = CLAY_ALIGN_X_CENTER}},
         .backgroundColor = COLOR_BACKGROUND}) {
-    int index = 0;
+    intptr_t index = 0;
     int rendered_images = 0;
     while (index < number_of_images) {
       CLAY({.id = CLAY_IDI("image_row", (int)index / 3),
@@ -236,8 +235,8 @@ void ImageGrid(SDL_Texture **img) {
           CLAY({.id = CLAY_IDI("image", index),
                 .layout = {.sizing = {.width = CLAY_SIZING_FIXED(200),
                                       .height = CLAY_SIZING_FIXED(200)}},
-                .aspectRatio = {(float)img[index]->w / img[index]->h},
-                .image = {.imageData = img[index]},
+                .image = {.imageData = img},
+                .userData = (void *)index,
                 .border = (rendered_images == selected_image)
                               ? image_border
                               : image_no_border}) {

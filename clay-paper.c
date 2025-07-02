@@ -55,7 +55,7 @@ void HandleClayErrors(Clay_ErrorData errorData) {
   printf("%s", errorData.errorText.chars);
 }
 
-Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture **img) {
+Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture *img) {
   Clay_BeginLayout();
 
   CLAY({.id = CLAY_ID("outer-container"),
@@ -80,6 +80,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture **img) {
 }
 
 SDL_Texture **img;
+SDL_Texture *texture_atlas;
 
 void create_texture_atlas(AppState *state, SDL_Texture **imgs) {
   uint_fast32_t height = number_of_images / 3;
@@ -199,6 +200,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
     SDL_free(img_path);
   }
   create_texture_atlas(state, img);
+  texture_atlas =
+      IMG_LoadTexture(state->rendererData.renderer,
+                      "/home/mig/.local/share/mike7d7/clay-paper/cache.png");
 
   /* Initialize Clay */
   uint64_t totalMemorySize = Clay_MinMemorySize();
@@ -425,7 +429,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 SDL_AppResult SDL_AppIterate(void *appstate) {
   AppState *state = appstate;
 
-  Clay_RenderCommandArray render_commands = ClayImageSample_CreateLayout(img);
+  Clay_RenderCommandArray render_commands =
+      ClayImageSample_CreateLayout(texture_atlas);
 
   SDL_SetRenderDrawColor(state->rendererData.renderer, 0, 0, 0, 255);
   SDL_RenderClear(state->rendererData.renderer);
