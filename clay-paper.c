@@ -28,7 +28,6 @@
 #define SCROLL_SENSITIVITY 3 // The higher, the more it scrolls
 
 static const Uint32 FONT_ID = 0;
-int *rendered_to_list;
 
 typedef struct app_state {
   SDL_Window *window;
@@ -116,8 +115,7 @@ void create_texture_atlas(AppState *state, SDL_Texture **imgs) {
     SDL_Surface *atlas_as_surface =
         SDL_RenderReadPixels(state->rendererData.renderer, NULL);
     if (atlas_as_surface) {
-      if (IMG_SavePNG(atlas_as_surface,
-                      "/home/mig/.local/share/mike7d7/clay-paper/cache.png")) {
+      if (IMG_SavePNG(atlas_as_surface, cache_path)) {
         SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "Texture atlas (cache) saved.");
       } else {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR,
@@ -181,28 +179,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   }
 
   state->rendererData.fonts[FONT_ID] = font;
-  // Load configs
+
   load_config();
-  // Load images and related stuff
-  // folder_path = argv[1]; // folder is 1st argument
-  files = SDL_GlobDirectory(folder_path, "*.*", 0,
-                            &number_of_images); // currently ignores subfolders
-  img = SDL_malloc(sizeof(SDL_Texture *) * number_of_images);
-  rendered_to_list = (int *)SDL_malloc(sizeof(int) * number_of_images);
-  for (int i = 0; i < number_of_images; i++) {
-    if (files[i][0] != '.') {
-      rendered_to_list[non_hidden_imgs] = i;
-      non_hidden_imgs++;
-    }
-    char *img_path = jf_concat(3, folder_path, "/", files[i]);
-    printf("%s\n", img_path);
-    img[i] = IMG_LoadTexture(state->rendererData.renderer, img_path);
-    SDL_free(img_path);
-  }
-  create_texture_atlas(state, img);
-  texture_atlas =
-      IMG_LoadTexture(state->rendererData.renderer,
-                      "/home/mig/.local/share/mike7d7/clay-paper/cache.png");
+  texture_atlas = IMG_LoadTexture(state->rendererData.renderer, cache_path);
 
   /* Initialize Clay */
   uint64_t totalMemorySize = Clay_MinMemorySize();
@@ -252,7 +231,8 @@ static void SDLCALL folder_dialog_callback(void *userdata,
                  number_of_images);
     SDL_free(rendered_to_list);
     img = SDL_malloc(sizeof(SDL_Texture *) * number_of_images);
-    rendered_to_list = (int *)SDL_malloc(sizeof(int) * number_of_images);
+    rendered_to_list =
+        (uint32_t *)SDL_malloc(sizeof(uint32_t) * number_of_images);
     non_hidden_imgs = 0;
     for (int i = 0; i < number_of_images; i++) {
       if (files[i][0] != '.') {
@@ -266,6 +246,8 @@ static void SDLCALL folder_dialog_callback(void *userdata,
     }
     filelist++;
     selected_image = 0;
+    create_texture_atlas(state, img);
+    texture_atlas = IMG_LoadTexture(state->rendererData.renderer, cache_path);
     Clay_GetScrollContainerData(CLAY_ID("image_grid")).scrollPosition->y = 0;
   }
 
