@@ -343,7 +343,11 @@ static void SDL_Clay_RenderClayCommands(Clay_SDL3RendererData *rendererData,
     case CLAY_RENDER_COMMAND_TYPE_IMAGE: {
       SDL_Texture *texture = (SDL_Texture *)rcmd->renderData.image.imageData;
       const SDL_FRect dest = {rect.x, rect.y, rect.w, rect.h};
-      SDL_RenderTexture(rendererData->renderer, texture, NULL, &dest);
+      intptr_t index = (intptr_t)rcmd->userData;
+      float x_offset = (index % 3) * 200;
+      float y_offset = SDL_floor((double)index / 3) * 200;
+      const SDL_FRect src = {x_offset, y_offset, 200, 200};
+      SDL_RenderTexture(rendererData->renderer, texture, &src, &dest);
       break;
     }
     default:

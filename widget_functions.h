@@ -26,11 +26,13 @@ extern char empty_buffer[];
 extern TextEditData default_data;
 extern bool editing_text;
 extern uint32_t config_options;
-extern int number_of_images;
+extern uint32_t number_of_images;
 extern char **files;
 extern uint_fast32_t selected_image;
 extern char *folder_path;
-extern uint_fast32_t non_hidden_imgs;
+extern uint32_t non_hidden_imgs;
+extern char *cache_path;
+extern uint32_t *rendered_to_list;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,

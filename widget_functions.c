@@ -14,11 +14,13 @@ SDL_Event end_text_edit;
 SDL_Event open_folder_dialog;
 bool editing_text = false;
 uint32_t config_options = 0;
-int number_of_images = 0;
+uint32_t number_of_images = 0;
 char **files = NULL;
 uint_fast32_t selected_image = 0;
 char *folder_path;
-uint_fast32_t non_hidden_imgs = 0;
+char *cache_path;
+uint32_t non_hidden_imgs = 0;
+uint32_t *rendered_to_list;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
