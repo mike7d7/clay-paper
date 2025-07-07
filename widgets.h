@@ -1,4 +1,5 @@
 #include "SDL3/SDL_render.h"
+#include "SDL3/SDL_stdinc.h"
 #include "clay.h"
 #include "widget_functions.h"
 #include <SDL3/SDL.h>
@@ -72,8 +73,8 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
 
 void DropDownButton(Clay_String id, Clay_String text,
                     Clay_String *dropdown_elements,
-                    uint_fast32_t number_of_elements,
-                    uint_fast32_t id_offset /*should be !=0*/) {
+                    Uint32 number_of_elements,
+                    Uint32 id_offset /*should be !=0*/) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {10, 10, 6, 6}},
@@ -114,7 +115,7 @@ void DropDownButton(Clay_String id, Clay_String text,
 
 void DropDownCheckBoxButton(Clay_String id, Clay_String text,
                             Clay_String *dropdown_elements,
-                            uint_fast32_t number_of_elements,
+                            Uint32 number_of_elements,
                             void *on_click_function) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),

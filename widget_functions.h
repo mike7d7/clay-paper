@@ -1,3 +1,4 @@
+#include "SDL3/SDL_stdinc.h"
 #include "clay.h"
 #include <stdint.h>
 
@@ -25,14 +26,14 @@ typedef struct {
 extern char empty_buffer[];
 extern TextEditData default_data;
 extern bool editing_text;
-extern uint32_t config_options;
-extern uint32_t number_of_images;
+extern Uint32 config_options;
+extern Uint32 number_of_images;
 extern char **files;
-extern uint_fast32_t selected_image;
+extern Uint32 selected_image;
 extern char *folder_path;
-extern uint32_t non_hidden_imgs;
+extern Uint32 non_hidden_imgs;
 extern char *cache_path;
-extern uint32_t *rendered_to_list;
+extern Uint32 *rendered_to_list;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,

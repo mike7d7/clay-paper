@@ -82,7 +82,7 @@ SDL_Texture **img;
 SDL_Texture *texture_atlas;
 
 void create_texture_atlas(AppState *state, SDL_Texture **imgs) {
-  uint_fast32_t height = number_of_images / 3;
+  Uint32 height = number_of_images / 3;
   height += (number_of_images % 3) ? 1 : 0;
   height *= 200;
   float image_width;
@@ -184,7 +184,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   texture_atlas = IMG_LoadTexture(state->rendererData.renderer, cache_path);
 
   /* Initialize Clay */
-  uint64_t totalMemorySize = Clay_MinMemorySize();
+  Uint64 totalMemorySize = Clay_MinMemorySize();
   Clay_Arena clayMemory = (Clay_Arena){.memory = SDL_malloc(totalMemorySize),
                                        .capacity = totalMemorySize};
 
@@ -231,8 +231,7 @@ static void SDLCALL folder_dialog_callback(void *userdata,
                  number_of_images);
     SDL_free(rendered_to_list);
     img = SDL_malloc(sizeof(SDL_Texture *) * number_of_images);
-    rendered_to_list =
-        (uint32_t *)SDL_malloc(sizeof(uint32_t) * number_of_images);
+    rendered_to_list = (Uint32 *)SDL_malloc(sizeof(Uint32) * number_of_images);
     non_hidden_imgs = 0;
     for (int i = 0; i < number_of_images; i++) {
       if (files[i][0] != '.') {
@@ -262,7 +261,7 @@ static void SDLCALL folder_dialog_callback(void *userdata,
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   AppState *state = appstate;
   SDL_AppResult ret_val = SDL_APP_CONTINUE;
-  uint_fast32_t shown_images;
+  Uint32 shown_images;
   Clay_ScrollContainerData scroll_data =
       Clay_GetScrollContainerData(CLAY_ID("image_grid"));
 
