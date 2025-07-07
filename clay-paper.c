@@ -310,6 +310,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     SDL_ShowOpenFolderDialog(folder_dialog_callback, state, state->window, NULL,
                              false);
     break;
+  case SDL_EVENT_USER + 3: // refresh_button
+    load_images(state);
+    break;
   case SDL_EVENT_TEXT_INPUT:
     strcat(empty_buffer, event->text.text);
     break;

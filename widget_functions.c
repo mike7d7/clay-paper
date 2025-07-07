@@ -12,6 +12,7 @@ Uint32 registered_event_type;
 SDL_Event start_text_edit;
 SDL_Event end_text_edit;
 SDL_Event open_folder_dialog;
+SDL_Event refresh_button;
 bool editing_text = false;
 Uint32 config_options = 0;
 Uint32 number_of_images = 0;
@@ -60,7 +61,7 @@ char *jf_concat(size_t n, ...) {
 }
 
 void InitializeCustomEvents() {
-  registered_event_type = SDL_RegisterEvents(3);
+  registered_event_type = SDL_RegisterEvents(4);
 
   SDL_zero(start_text_edit);
   start_text_edit.type = registered_event_type;
@@ -73,6 +74,10 @@ void InitializeCustomEvents() {
   SDL_zero(open_folder_dialog);
   open_folder_dialog.type = registered_event_type + 2;
   open_folder_dialog.user.code = 3;
+
+  SDL_zero(refresh_button);
+  refresh_button.type = registered_event_type + 3;
+  refresh_button.user.code = 4;
 }
 
 void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
