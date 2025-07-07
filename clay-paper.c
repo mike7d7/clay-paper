@@ -201,26 +201,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   return SDL_APP_CONTINUE;
 }
 
-static void SDLCALL folder_dialog_callback(void *userdata,
-                                           const char *const *filelist,
-                                           int filter) {
-  AppState *state = userdata;
-  if (!filelist) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "An error occured: %s",
-                 SDL_GetError());
-    return;
-  } else if (!*filelist) {
-    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "The user did not select any file.");
-    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG,
-                 "Most likely, the dialog was canceled.");
-    return;
-  }
-
-  while (*filelist) {
+void load_images(AppState *state) {
+  if (folder_path) {
     SDL_free(files);
-    SDL_free(folder_path);
-    folder_path = SDL_malloc(SDL_strlen(*filelist) + 1);
-    SDL_strlcpy(folder_path, *filelist, SDL_strlen(*filelist) + 1);
     SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "Full path to selected file: '%s'",
                  folder_path);
     files =
@@ -243,11 +226,33 @@ static void SDLCALL folder_dialog_callback(void *userdata,
       img[i] = IMG_LoadTexture(state->rendererData.renderer, img_path);
       SDL_free(img_path);
     }
-    filelist++;
     selected_image = 0;
     create_texture_atlas(state, img);
     texture_atlas = IMG_LoadTexture(state->rendererData.renderer, cache_path);
     Clay_GetScrollContainerData(CLAY_ID("image_grid")).scrollPosition->y = 0;
+  }
+}
+
+static void SDLCALL folder_dialog_callback(void *userdata,
+                                           const char *const *filelist,
+                                           int filter) {
+  AppState *state = userdata;
+  if (!filelist) {
+    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "An error occured: %s",
+                 SDL_GetError());
+    return;
+  } else if (!*filelist) {
+    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "The user did not select any file.");
+    SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG,
+                 "Most likely, the dialog was canceled.");
+    return;
+  }
+
+  if (*filelist) {
+    SDL_free(folder_path);
+    folder_path = SDL_malloc(SDL_strlen(*filelist) + 1);
+    SDL_strlcpy(folder_path, *filelist, SDL_strlen(*filelist) + 1);
+    load_images(state);
   }
 
   if (filter < 0) {
@@ -304,6 +309,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   case SDL_EVENT_USER + 2: // open_folder_dialog
     SDL_ShowOpenFolderDialog(folder_dialog_callback, state, state->window, NULL,
                              false);
+    break;
+  case SDL_EVENT_USER + 3: // refresh_button
+    load_images(state);
     break;
   case SDL_EVENT_TEXT_INPUT:
     strcat(empty_buffer, event->text.text);
