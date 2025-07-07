@@ -72,8 +72,7 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
 }
 
 void DropDownButton(Clay_String id, Clay_String text,
-                    Clay_String *dropdown_elements,
-                    Uint32 number_of_elements,
+                    Clay_String *dropdown_elements, Uint32 number_of_elements,
                     Uint32 id_offset /*should be !=0*/) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),
@@ -191,8 +190,7 @@ void HeaderBar() {
                                CLAY_STRING("Date ↓"), CLAY_STRING("Date ↑")};
     DropDownButton(CLAY_STRING("Name"), CLAY_STRING("Name"), names_arr, 4, 1);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Refresh"), CLAY_STRING("Refresh"),
-                 HandleExitButton);
+    HeaderButton(CLAY_STRING("Refresh"), CLAY_STRING("Refresh"), HandleRefresh);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Random"), CLAY_STRING("Random"),
                  HandleExitButton);
