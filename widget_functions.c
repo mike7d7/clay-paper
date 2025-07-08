@@ -161,3 +161,16 @@ void HandleRefresh(Clay_ElementId id, Clay_PointerData pointer_data) {
     SDL_PushEvent(&refresh_button);
   }
 }
+
+void HandleRandom(Clay_ElementId id, Clay_PointerData pointer_data) {
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    if ((config_options & SHOW_HIDDEN)) {
+      selected_image = SDL_rand(number_of_images);
+      updateImg(selected_image, selected_image);
+    } else {
+      selected_image = SDL_rand(non_hidden_imgs);
+      int img_index = rendered_to_list[selected_image];
+      updateImg(selected_image, img_index);
+    }
+  }
+}

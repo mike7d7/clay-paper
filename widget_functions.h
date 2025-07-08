@@ -48,4 +48,5 @@ void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
                     intptr_t index);
 void HandleFolder(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleRefresh(Clay_ElementId id, Clay_PointerData pointer_data);
+void HandleRandom(Clay_ElementId id, Clay_PointerData pointer_data);
 char *jf_concat(size_t n, ...);

@@ -188,8 +188,7 @@ void HeaderBar() {
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Refresh"), CLAY_STRING("Refresh"), HandleRefresh);
     HorizontalSpacer();
-    HeaderButton(CLAY_STRING("Random"), CLAY_STRING("Random"),
-                 HandleExitButton);
+    HeaderButton(CLAY_STRING("Random"), CLAY_STRING("Random"), HandleRandom);
     HorizontalSpacer();
     Clay_String options_arr[] = {
         CLAY_STRING("Show GIFs only"), CLAY_STRING("Show subfolders"),
