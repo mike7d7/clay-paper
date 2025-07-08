@@ -8,7 +8,6 @@
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3/SDL_surface.h"
 #include "SDL3_image/SDL_image.h"
-#include <stdint.h>
 #include <string.h>
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL.h>
