@@ -172,5 +172,16 @@ void HandleRandom(Clay_ElementId id, Clay_PointerData pointer_data) {
       int img_index = rendered_to_list[selected_image];
       updateImg(selected_image, img_index);
     }
+    Clay_ScrollContainerData scroll_data =
+        Clay_GetScrollContainerData(CLAY_ID("image_grid"));
+    Clay_ElementData element_data =
+        Clay_GetElementData(CLAY_IDI("image_row", (int)selected_image / 3));
+    float new_scroll_data = (element_data.boundingBox.height + 16) *
+                            (SDL_floorf((float)selected_image / 3));
+    if (new_scroll_data > scroll_data.scrollContainerDimensions.height + 63 ||
+        element_data.boundingBox.y < 0) {
+      scroll_data.scrollPosition->y = 0;
+      scroll_data.scrollPosition->y -= new_scroll_data;
+    }
   }
 }
