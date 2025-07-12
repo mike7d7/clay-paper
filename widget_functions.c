@@ -120,7 +120,11 @@ void HandleClearButton(Clay_ElementId id, Clay_PointerData pointer_data) {
 void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
                          int config) {
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    Clay_ScrollContainerData scroll_data =
+        Clay_GetScrollContainerData(CLAY_ID("image_grid"));
+    selected_image = 0;
     config_options ^= 1 << config;
+    scroll_data.scrollPosition->y = 0;
   }
 }
 
