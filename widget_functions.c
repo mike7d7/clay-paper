@@ -22,6 +22,7 @@ char *folder_path;
 char *cache_path;
 Uint32 non_hidden_imgs = 0;
 Uint32 *rendered_to_list;
+Uint32 shown_images;
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),

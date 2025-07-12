@@ -34,6 +34,7 @@ extern char *folder_path;
 extern Uint32 non_hidden_imgs;
 extern char *cache_path;
 extern Uint32 *rendered_to_list;
+extern Uint32 shown_images;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,

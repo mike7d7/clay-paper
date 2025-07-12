@@ -196,6 +196,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
 
   InitializeCustomEvents();
   *appstate = state;
+  shown_images =
+      (config_options & SHOW_HIDDEN) ? number_of_images : non_hidden_imgs;
 
   return SDL_APP_CONTINUE;
 }
@@ -265,7 +267,6 @@ static void SDLCALL folder_dialog_callback(void *userdata,
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   AppState *state = appstate;
   SDL_AppResult ret_val = SDL_APP_CONTINUE;
-  Uint32 shown_images;
   Clay_ScrollContainerData scroll_data =
       Clay_GetScrollContainerData(CLAY_ID("image_grid"));
 
@@ -316,9 +317,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     strcat(empty_buffer, event->text.text);
     break;
   case SDL_EVENT_KEY_DOWN:
-    shown_images =
-        (config_options & SHOW_HIDDEN) ? number_of_images : non_hidden_imgs;
     if (editing_text) {
+      selected_image = 0;
       if (event->key.key == SDLK_ESCAPE || event->key.key == SDLK_RETURN) {
         SDL_StopTextInput(state->window);
         editing_text = false;
@@ -391,9 +391,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         scroll_data.scrollPosition->y = 0;
       }
       if (event->key.key == SDLK_RETURN) {
-        updateImg(selected_image, (config_options & SHOW_HIDDEN)
-                                      ? selected_image
-                                      : rendered_to_list[selected_image]);
+        updateImg(selected_image, rendered_to_list[selected_image]);
       }
     }
     break;

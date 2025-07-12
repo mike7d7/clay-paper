@@ -226,6 +226,10 @@ void ImageGrid(SDL_Texture *img) {
             index++;
             continue;
           }
+          if (SDL_strlen(empty_buffer) && SDL_strcasestr(files[index], empty_buffer) == NULL) {
+            index++;
+            continue;
+          }
           CLAY({.id = CLAY_IDI("image", index),
                 .layout = {.sizing = {.width = CLAY_SIZING_FIXED(200),
                                       .height = CLAY_SIZING_FIXED(200)}},
@@ -239,6 +243,7 @@ void ImageGrid(SDL_Texture *img) {
             indexes->rendered_images = rendered_images;
             Clay_OnHover(HandleImgClick, (intptr_t)indexes);
           };
+          rendered_to_list[rendered_images] = index;
           index++;
           rendered_images++;
           if (rendered_images % 3 == 0) {
@@ -247,5 +252,6 @@ void ImageGrid(SDL_Texture *img) {
         }
       };
     }
+    shown_images = rendered_images;
   };
 }
