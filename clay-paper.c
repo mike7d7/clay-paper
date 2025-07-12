@@ -390,6 +390,20 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         config_options ^= SHOW_HIDDEN;
         scroll_data.scrollPosition->y = 0;
       }
+      if ((event->key.mod & SDL_KMOD_CTRL) && event->key.key == SDLK_F) {
+        Clay_ElementData element_data = Clay_GetElementData(CLAY_ID("search"));
+        SDL_Rect *element_area = SDL_malloc(sizeof(SDL_Rect));
+        *element_area = (SDL_Rect){
+            .x = element_data.boundingBox.x,
+            .y = element_data.boundingBox.y,
+            .w = element_data.boundingBox.width,
+            .h = element_data.boundingBox.height,
+        };
+        SDL_StartTextInput(state->window);
+        SDL_SetTextInputArea(state->window, element_area, 0);
+        editing_text = true;
+        SDL_free(element_area);
+      }
       if (event->key.key == SDLK_RETURN) {
         updateImg(selected_image, rendered_to_list[selected_image]);
       }
