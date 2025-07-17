@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <unistd.h>
 
-char empty_buffer[1024];
+char empty_buffer[128];
 bool text_input_initialized = false;
 Uint32 registered_event_type;
 SDL_Event start_text_edit;
