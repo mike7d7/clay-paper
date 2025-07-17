@@ -57,6 +57,7 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
         .backgroundColor =
             Clay_Hovered() ? COLOR_TEXTEDIT_HOVERED : COLOR_TEXTEDIT_NORMAL,
         .cornerRadius = CLAY_CORNER_RADIUS(12),
+        .clip = {.horizontal = true, .childOffset = Clay_GetScrollOffset()},
         .border = {.width =
                        editing_text ? border_text_active : border_text_inactive,
                    .color = COLOR_TEXTEDIT_ACTIVE}}) {
