@@ -62,6 +62,15 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
                        editing_text ? border_text_active : border_text_inactive,
                    .color = COLOR_TEXTEDIT_ACTIVE}}) {
     Clay_OnHover(HandleTextEditInteraction, 0);
+    if (editing_text && text.length == 0) {
+        CLAY({.layout.padding = {0, 0, 0, 0}}) {
+          CLAY({
+              .layout = {.sizing = {.height = CLAY_SIZING_FIXED(20),
+                                    .width = CLAY_SIZING_FIXED(2)}},
+              .backgroundColor = COLOR_WHITE,
+          });
+        };
+    }
     CLAY_TEXT(
         text.length > 0 ? text : data->hintText,
         CLAY_TEXT_CONFIG({.textColor = text.length > 0
@@ -69,6 +78,16 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
                                            : (Clay_Color){117, 138, 161, 255},
                           .fontSize = 16,
                           .fontId = 0}));
+    // Caret
+    if (editing_text && text.length > 0) {
+        CLAY({.layout.padding = {0, 0, 0, 0}}) {
+          CLAY({
+              .layout = {.sizing = {.height = CLAY_SIZING_FIXED(20),
+                                    .width = CLAY_SIZING_FIXED(2)}},
+              .backgroundColor = COLOR_WHITE,
+          });
+        };
+    }
   }
 }
 
@@ -227,7 +246,8 @@ void ImageGrid(SDL_Texture *img) {
             index++;
             continue;
           }
-          if (SDL_strlen(empty_buffer) && SDL_strcasestr(files[index], empty_buffer) == NULL) {
+          if (SDL_strlen(empty_buffer) &&
+              SDL_strcasestr(files[index], empty_buffer) == NULL) {
             index++;
             continue;
           }
