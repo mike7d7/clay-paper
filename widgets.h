@@ -18,6 +18,11 @@ const Clay_BorderElementConfig image_border = {.color = COLOR_TEXTEDIT_ACTIVE,
 const Clay_BorderElementConfig image_no_border = {.width = {0, 0, 0, 0}};
 #define TOP_WIDTH 400
 
+const char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
+                                  "left", "right",  "top",    "bottom", "wave",
+                                  "grow", "center", "outer",  "random"};
+const char *fill_types[] = {"fill", "stretch", "fit", "center", "tile"};
+
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {10, 10, 6, 6}},
