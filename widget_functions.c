@@ -24,6 +24,11 @@ Uint32 non_hidden_imgs = 0;
 Uint32 *rendered_to_list;
 Uint32 shown_images;
 
+const char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
+                                  "left", "right",  "top",    "bottom", "wave",
+                                  "grow", "center", "outer",  "random"};
+const char *fill_types[] = {"fill", "stretch", "fit", "center", "tile"};
+
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
     .textToEdit = empty_buffer,
