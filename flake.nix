@@ -40,7 +40,7 @@
               sdl3-image
             ];
             buildPhase = ''
-              clang clay-paper.c widget_functions.c config.c -o clay-paper `pkg-config --libs --cflags sdl3 sdl3-ttf sdl3-image` -O3
+              SDL_LOGGING=error SDL_VIDEODRIVER=wayland clang clay-paper.c widget_functions.c config.c -o clay-paper `pkg-config --libs --cflags sdl3 sdl3-ttf sdl3-image` -O3
             '';
             installPhase = ''
               mkdir -p $out/bin
@@ -62,7 +62,7 @@
             dontStrip = true;
             # dont use address sanitizer since with it SDL fails with 'No available video device'
             buildPhase = ''
-              clang clay-paper.c widget_functions.c config.c -o clay-paper-debug `pkg-config --libs --cflags sdl3 sdl3-ttf sdl3-image` -glldb -O0
+              SDL_LOGGING=debug SDL_VIDEODRIVER=wayland clang clay-paper.c widget_functions.c config.c -o clay-paper-debug `pkg-config --libs --cflags sdl3 sdl3-ttf sdl3-image` -glldb -O0
             '';
             installPhase = ''
               mkdir -p $out/bin
