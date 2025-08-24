@@ -27,7 +27,7 @@ Uint32 shown_images;
 const char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
                                   "left", "right",  "top",    "bottom", "wave",
                                   "grow", "center", "outer",  "random"};
-const char *fill_types[] = {"fill", "stretch", "fit", "center", "tile"};
+const char *fill_types[] = {"no", "crop", "fit", "stretch"};
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
@@ -137,13 +137,22 @@ void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
 void updateImg(int rendered_images, int image_list) {
   selected_image = rendered_images;
   char *img_path = jf_concat(3, folder_path, "/", files[image_list]);
-  char *argument_list[] = {"swww",   "img",
-                           img_path, "--transition-type",
-                           "wipe",   "--transition-step",
-                           "255",    "--transition-angle",
-                           "30",     "--transition-duration",
-                           "2",      "--transition-fps",
-                           "240",    NULL};
+  char *argument_list[] = {"swww",
+                           "img",
+                           img_path,
+                           "--resize",
+                           fill_types[1],
+                           "--transition-type",
+                           transition_types[4],
+                           "--transition-step",
+                           "255",
+                           "--transition-angle",
+                           "30",
+                           "--transition-duration",
+                           "2",
+                           "--transition-fps",
+                           "240",
+                           NULL};
 
   if (fork() == 0) {
     execvp("swww", argument_list);
