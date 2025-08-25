@@ -1,5 +1,6 @@
 #include "widget_functions.h"
 #include "SDL3/SDL_events.h"
+#include "SDL3/SDL_log.h"
 #include "SDL3/SDL_stdinc.h"
 #include "clay.h"
 #include <SDL3/SDL.h>
@@ -202,5 +203,21 @@ void HandleRandom(Clay_ElementId id, Clay_PointerData pointer_data) {
       scroll_data.scrollPosition->y = 0;
       scroll_data.scrollPosition->y -= new_scroll_data;
     }
+  }
+}
+
+void HandleFillTypes(Clay_ElementId id, Clay_PointerData pointer_data,
+                     int selected_index) {
+
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    SDL_Log("selected fill type = %s", fill_types[selected_index]);
+  }
+}
+
+void HandleTransitionTypes(Clay_ElementId id, Clay_PointerData pointer_data,
+                           int selected_index) {
+
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    SDL_Log("selected fill type = %s", transition_types[selected_index]);
   }
 }

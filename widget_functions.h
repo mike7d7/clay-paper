@@ -35,6 +35,8 @@ extern Uint32 non_hidden_imgs;
 extern char *cache_path;
 extern Uint32 *rendered_to_list;
 extern Uint32 shown_images;
+extern const char *transition_types[];
+extern const char *fill_types[];
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,
@@ -50,4 +52,8 @@ void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
 void HandleFolder(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleRefresh(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleRandom(Clay_ElementId id, Clay_PointerData pointer_data);
+void HandleFillTypes(Clay_ElementId id, Clay_PointerData pointer_data,
+                         int selected_index);
+void HandleTransitionTypes(Clay_ElementId id, Clay_PointerData pointer_data,
+                         int selected_index);
 char *jf_concat(size_t n, ...);

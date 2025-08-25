@@ -67,11 +67,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture *img) {
         .backgroundColor = COLOR_BACKGROUND}) {
     HeaderBar();
     ImageGrid(img);
-    CLAY({
-        .id = CLAY_ID("footer"),
-        .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)}},
-        .backgroundColor = COLOR_ELEMENT_BACKGROUND,
-    });
+    Footer();
   };
 
   return Clay_EndLayout();

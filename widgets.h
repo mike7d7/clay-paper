@@ -3,6 +3,7 @@
 #include "clay.h"
 #include "widget_functions.h"
 #include <SDL3/SDL.h>
+#include <string.h>
 
 const int FONT_ID_BODY_16 = 0;
 const Clay_Color COLOR_WHITE = {255, 255, 255, 255};
@@ -93,7 +94,7 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
 
 void DropDownButton(Clay_String id, Clay_String text,
                     Clay_String *dropdown_elements, Uint32 number_of_elements,
-                    Uint32 id_offset /*should be !=0*/) {
+                    Uint32 id_offset /*should be !=0*/, void* onHoverFunction) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {10, 10, 6, 6}},
@@ -114,13 +115,14 @@ void DropDownButton(Clay_String id, Clay_String text,
           .backgroundColor = {40, 40, 40, 255},
           .cornerRadius = CLAY_CORNER_RADIUS(12),
           .floating = {.attachTo = CLAY_ATTACH_TO_PARENT,
-                       .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_TOP,
+                       .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_BOTTOM,
                                         .parent =
-                                            CLAY_ATTACH_POINT_LEFT_BOTTOM}},
+                                            CLAY_ATTACH_POINT_LEFT_TOP}},
       }) {
         for (int i = 0; i < number_of_elements; i++) {
           CLAY({.id = CLAY_SID(dropdown_elements[i]),
                 .layout = {.padding = {0, 0, 6, 6}}}) {
+                    Clay_OnHover(onHoverFunction, i);
             CLAY_TEXT(dropdown_elements[i],
                       CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
                                         .fontSize = 16,
@@ -218,6 +220,34 @@ void HeaderBar() {
                            options_arr, 5, HandleOptionsButton);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Exit"), CLAY_STRING("Exit"), HandleExitButton);
+  };
+}
+
+void Footer() {
+  int fill_types_length = 4;
+  int transition_types_length = 14;
+  Clay_String clay_str_transition_types[] = {
+      CLAY_STRING("any"),   CLAY_STRING("none"),  CLAY_STRING("simple"),
+      CLAY_STRING("fade"),  CLAY_STRING("wipe"),  CLAY_STRING("left"),
+      CLAY_STRING("right"), CLAY_STRING("top"),   CLAY_STRING("bottom"),
+      CLAY_STRING("wave"),  CLAY_STRING("grow"),  CLAY_STRING("center"),
+      CLAY_STRING("outer"), CLAY_STRING("random")};
+
+  Clay_String clay_str_fill_types[] = {CLAY_STRING("no"), CLAY_STRING("crop"),
+                                       CLAY_STRING("fit"),
+                                       CLAY_STRING("stretch")};
+
+  CLAY({
+      .id = CLAY_ID("footer"),
+      .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)}},
+      .backgroundColor = COLOR_ELEMENT_BACKGROUND,
+  }) {
+    DropDownButton(CLAY_STRING("FillTypes"), CLAY_STRING("Fill Type"),
+                   clay_str_fill_types, fill_types_length, 1, HandleFillTypes);
+    HorizontalSpacer();
+    DropDownButton(CLAY_STRING("TransitionTypes"),
+                   CLAY_STRING("Transition Type"), clay_str_transition_types,
+                   transition_types_length, 2, HandleTransitionTypes);
   };
 }
 
