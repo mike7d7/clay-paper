@@ -94,7 +94,8 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
 
 void DropDownButton(Clay_String id, Clay_String text,
                     Clay_String *dropdown_elements, Uint32 number_of_elements,
-                    Uint32 id_offset /*should be !=0*/, void* onHoverFunction) {
+                    Uint32 id_offset /*should be !=0*/, Uint32 selected_option,
+                    void *onHoverFunction) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {10, 10, 6, 6}},
@@ -115,18 +116,22 @@ void DropDownButton(Clay_String id, Clay_String text,
           .backgroundColor = {40, 40, 40, 255},
           .cornerRadius = CLAY_CORNER_RADIUS(12),
           .floating = {.attachTo = CLAY_ATTACH_TO_PARENT,
-                       .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_BOTTOM,
-                                        .parent =
-                                            CLAY_ATTACH_POINT_LEFT_TOP}},
+                       .attachPoints = {.element =
+                                            CLAY_ATTACH_POINT_LEFT_BOTTOM,
+                                        .parent = CLAY_ATTACH_POINT_LEFT_TOP}},
       }) {
         for (int i = 0; i < number_of_elements; i++) {
+          Clay_Color text_color = COLOR_WHITE;
+          if (i == selected_option) {
+            text_color = COLOR_CATPPUCCIN_GREEN;
+          }
           CLAY({.id = CLAY_SID(dropdown_elements[i]),
                 .layout = {.padding = {0, 0, 6, 6}}}) {
-                    Clay_OnHover(onHoverFunction, i);
+            Clay_OnHover(onHoverFunction, i);
             CLAY_TEXT(dropdown_elements[i],
                       CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
                                         .fontSize = 16,
-                                        .textColor = {255, 255, 255, 255}}));
+                                        .textColor = text_color}));
           };
         }
       };
@@ -243,11 +248,13 @@ void Footer() {
       .backgroundColor = COLOR_ELEMENT_BACKGROUND,
   }) {
     DropDownButton(CLAY_STRING("FillTypes"), CLAY_STRING("Fill Type"),
-                   clay_str_fill_types, fill_types_length, 1, HandleFillTypes);
+                   clay_str_fill_types, fill_types_length, 1, fill_type,
+                   HandleFillTypes);
     HorizontalSpacer();
     DropDownButton(CLAY_STRING("TransitionTypes"),
                    CLAY_STRING("Transition Type"), clay_str_transition_types,
-                   transition_types_length, 2, HandleTransitionTypes);
+                   transition_types_length, 2, transition_type,
+                   HandleTransitionTypes);
   };
 }
 

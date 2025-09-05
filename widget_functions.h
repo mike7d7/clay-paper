@@ -37,6 +37,8 @@ extern Uint32 *rendered_to_list;
 extern Uint32 shown_images;
 extern const char *transition_types[];
 extern const char *fill_types[];
+extern Uint32 transition_type;
+extern Uint32 fill_type;
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,

@@ -24,6 +24,8 @@ char *cache_path;
 Uint32 non_hidden_imgs = 0;
 Uint32 *rendered_to_list;
 Uint32 shown_images;
+Uint32 transition_type = 1;
+Uint32 fill_type = 1;
 
 const char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
                                   "left", "right",  "top",    "bottom", "wave",
@@ -210,6 +212,7 @@ void HandleFillTypes(Clay_ElementId id, Clay_PointerData pointer_data,
                      int selected_index) {
 
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    fill_type = selected_index;
     SDL_Log("selected fill type = %s", fill_types[selected_index]);
   }
 }
@@ -218,6 +221,7 @@ void HandleTransitionTypes(Clay_ElementId id, Clay_PointerData pointer_data,
                            int selected_index) {
 
   if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    transition_type = selected_index;
     SDL_Log("selected fill type = %s", transition_types[selected_index]);
   }
 }
