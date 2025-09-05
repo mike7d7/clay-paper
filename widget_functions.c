@@ -24,8 +24,8 @@ char *cache_path;
 Uint32 non_hidden_imgs = 0;
 Uint32 *rendered_to_list;
 Uint32 shown_images;
-Uint32 transition_type = 1;
-Uint32 fill_type = 1;
+Uint32 transition_type;
+Uint32 fill_type;
 
 const char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
                                   "left", "right",  "top",    "bottom", "wave",
