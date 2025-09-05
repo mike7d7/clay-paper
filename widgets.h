@@ -17,7 +17,6 @@ const Clay_Color COLOR_TRANSPARENT = {0, 0, 0, 0};
 const Clay_BorderElementConfig image_border = {.color = COLOR_TEXTEDIT_ACTIVE,
                                                .width = {8, 8, 8, 8}};
 const Clay_BorderElementConfig image_no_border = {.width = {0, 0, 0, 0}};
-#define TOP_WIDTH 400
 
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
   CLAY({.id = CLAY_SID(id),
@@ -35,7 +34,7 @@ void HorizontalSpacer() {
   CLAY({.layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)}}});
 }
 
-void TextEditComponent(Clay_String id, TextEditData *data) {
+void TextEditComponent(Clay_String id, TextEditData *data, float width) {
   Clay_String text = (Clay_String){.length = strlen(data->textToEdit),
                                    .chars = data->textToEdit};
 
@@ -54,7 +53,7 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {10, 10, 6, 6},
                    .childAlignment = {.y = CLAY_ALIGN_Y_CENTER},
-                   .sizing = {.width = CLAY_SIZING_FIXED(TOP_WIDTH / 2.0f)}},
+                   .sizing = {.width = CLAY_SIZING_FIXED(width)}},
         .backgroundColor =
             Clay_Hovered() ? COLOR_TEXTEDIT_HOVERED : COLOR_TEXTEDIT_NORMAL,
         .cornerRadius = CLAY_CORNER_RADIUS(12),
@@ -209,7 +208,7 @@ void HeaderBar() {
   }) {
     HeaderButton(CLAY_STRING("Folder"), CLAY_STRING("Folder"), HandleFolder);
     HorizontalSpacer();
-    TextEditComponent(CLAY_STRING("search"), &default_data);
+    TextEditComponent(CLAY_STRING("search"), &default_data, 200.0f);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Clear"), CLAY_STRING("Clear"), HandleClearButton);
     HorizontalSpacer();
