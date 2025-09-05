@@ -244,7 +244,12 @@ void Footer() {
 
   CLAY({
       .id = CLAY_ID("footer"),
-      .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)}},
+      .layout =
+          {
+              .sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)},
+              .childAlignment = {.y = CLAY_ALIGN_Y_CENTER,
+                                 .x = CLAY_ALIGN_X_CENTER},
+          },
       .backgroundColor = COLOR_ELEMENT_BACKGROUND,
   }) {
     DropDownButton(CLAY_STRING("FillTypes"), CLAY_STRING("Fill Type"),
