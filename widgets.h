@@ -61,7 +61,7 @@ void TextEditComponent(Clay_String id, TextEditData *data, float width) {
         .border = {.width =
                        editing_text ? border_text_active : border_text_inactive,
                    .color = COLOR_TEXTEDIT_ACTIVE}}) {
-    Clay_OnHover(HandleTextEditInteraction, 0);
+    Clay_OnHover(HandleTextEditInteraction, (intptr_t)data);
     if (editing_text && text.length == 0) {
       CLAY({.layout.padding = {0, 0, 0, 0}}) {
         CLAY({
@@ -254,6 +254,14 @@ void Footer() {
     DropDownButton(CLAY_STRING("FillTypes"), CLAY_STRING("Fill Type"),
                    clay_str_fill_types, fill_types_length, 1, fill_type,
                    HandleFillTypes);
+    HorizontalSpacer();
+    TextEditComponent(CLAY_STRING("duration"), &duration_data, 100.0f);
+    HorizontalSpacer();
+    TextEditComponent(CLAY_STRING("angle"), &angle_data, 100.0f);
+    HorizontalSpacer();
+    TextEditComponent(CLAY_STRING("fps"), &fps_data, 100.0f);
+    HorizontalSpacer();
+    TextEditComponent(CLAY_STRING("steps"), &steps_data, 100.0f);
     HorizontalSpacer();
     DropDownButton(CLAY_STRING("TransitionTypes"),
                    CLAY_STRING("Transition Type"), clay_str_transition_types,

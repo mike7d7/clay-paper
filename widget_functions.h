@@ -25,6 +25,10 @@ typedef struct {
 // terminator).
 extern char empty_buffer[];
 extern TextEditData default_data;
+extern TextEditData duration_data;
+extern TextEditData angle_data;
+extern TextEditData fps_data;
+extern TextEditData steps_data;
 extern bool editing_text;
 extern Uint32 config_options;
 extern Uint32 number_of_images;
@@ -39,6 +43,12 @@ extern const char *transition_types[];
 extern const char *fill_types[];
 extern Uint32 transition_type;
 extern Uint32 fill_type;
+
+// swww arguments
+extern char duration[];
+extern char angle[];
+extern char fps[];
+extern char steps[];
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,

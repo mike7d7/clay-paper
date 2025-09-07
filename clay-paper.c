@@ -32,6 +32,7 @@ typedef struct app_state {
   SDL_Window *window;
   Clay_SDL3RendererData rendererData;
 } AppState;
+TextEditData *current_textbox_buffer;
 
 static inline Clay_Dimensions SDL_MeasureText(Clay_StringSlice text,
                                               Clay_TextElementConfig *config,
@@ -265,7 +266,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   SDL_AppResult ret_val = SDL_APP_CONTINUE;
   Clay_ScrollContainerData scroll_data =
       Clay_GetScrollContainerData(CLAY_ID("image_grid"));
-
   switch (event->type) {
   case SDL_EVENT_QUIT:
     ret_val = SDL_APP_SUCCESS;
@@ -296,6 +296,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     SDL_StartTextInput(state->window);
     SDL_SetTextInputArea(state->window, event->user.data1, 0);
     editing_text = true;
+    current_textbox_buffer = event->user.data2;
     SDL_free(event->user.data1);
     break;
   case SDL_EVENT_USER + 1: // end_text_edit
@@ -310,7 +311,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     load_images(state);
     break;
   case SDL_EVENT_TEXT_INPUT:
-    strcat(empty_buffer, event->text.text);
+    strcat(current_textbox_buffer->textToEdit, event->text.text);
     break;
   case SDL_EVENT_KEY_DOWN:
     if (editing_text) {

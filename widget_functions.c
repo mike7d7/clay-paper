@@ -27,6 +27,12 @@ Uint32 shown_images;
 Uint32 transition_type;
 Uint32 fill_type;
 
+// swww arguments
+char duration_buffer[128];
+char angle_buffer[128];
+char fps_buffer[128];
+char steps_buffer[128];
+
 const char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
                                   "left", "right",  "top",    "bottom", "wave",
                                   "grow", "center", "outer",  "random"};
@@ -38,7 +44,30 @@ TextEditData default_data = (TextEditData){
     .isPassword = false,
     .maxLength = sizeof(empty_buffer),
 };
-
+TextEditData duration_data = (TextEditData){
+    .hintText = CLAY_STRING("Duration"),
+    .textToEdit = duration_buffer,
+    .isPassword = false,
+    .maxLength = sizeof(duration_buffer),
+};
+TextEditData angle_data = (TextEditData){
+    .hintText = CLAY_STRING("Angle"),
+    .textToEdit = angle_buffer,
+    .isPassword = false,
+    .maxLength = sizeof(angle_buffer),
+};
+TextEditData fps_data = (TextEditData){
+    .hintText = CLAY_STRING("FPS"),
+    .textToEdit = fps_buffer,
+    .isPassword = false,
+    .maxLength = sizeof(fps_buffer),
+};
+TextEditData steps_data = (TextEditData){
+    .hintText = CLAY_STRING("Steps"),
+    .textToEdit = steps_buffer,
+    .isPassword = false,
+    .maxLength = sizeof(steps_buffer),
+};
 // Copied from jftui with minor modifications made.
 // https://github.com/Aanok/jftui/blob/master/src/shared.c
 char *jf_concat(size_t n, ...) {
@@ -102,6 +131,7 @@ void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
     };
     if (registered_event_type != 0) {
       start_text_edit.user.data1 = element_area;
+      start_text_edit.user.data2 = (void *)userData;
       SDL_PushEvent(&start_text_edit);
     }
   }
