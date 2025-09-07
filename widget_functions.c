@@ -34,10 +34,10 @@ char angle_buffer[128];
 char fps_buffer[128];
 char steps_buffer[128];
 
-const char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
-                                  "left", "right",  "top",    "bottom", "wave",
-                                  "grow", "center", "outer",  "random"};
-const char *fill_types[] = {"no", "crop", "fit", "stretch"};
+char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
+                            "left", "right",  "top",    "bottom", "wave",
+                            "grow", "center", "outer",  "random"};
+char *fill_types[] = {"no", "crop", "fit", "stretch"};
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
