@@ -321,9 +321,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         editing_text = false;
       }
       if (event->key.key == SDLK_BACKSPACE) {
-        int length = strlen(empty_buffer);
+        int length = strlen(current_textbox_buffer->textToEdit);
         if (length > 0) {
-          empty_buffer[length - 1] = '\0';
+          current_textbox_buffer->textToEdit[length - 1] = '\0';
         }
       }
     } else {
