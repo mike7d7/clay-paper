@@ -179,13 +179,13 @@ void updateImg(int rendered_images, int image_list) {
                            "--transition-type",
                            transition_types[transition_type],
                            "--transition-step",
-                           "255",
+                           SDL_strlen(steps_buffer) ? steps_buffer : "255",
                            "--transition-angle",
-                           "30",
+                           SDL_strlen(angle_buffer) ? angle_buffer : "30",
                            "--transition-duration",
-                           "2",
+                           SDL_strlen(duration_buffer) ? duration_buffer : "2",
                            "--transition-fps",
-                           "240",
+                           SDL_strlen(fps_buffer) ? fps_buffer : "120",
                            NULL};
 
   if (fork() == 0) {

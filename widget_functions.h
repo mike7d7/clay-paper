@@ -45,12 +45,6 @@ extern Uint32 transition_type;
 extern Uint32 fill_type;
 extern TextEditData *current_textbox_buffer;
 
-// swww arguments
-extern char duration[];
-extern char angle[];
-extern char fps[];
-extern char steps[];
-
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,
                                Clay_PointerData pointer_data,
