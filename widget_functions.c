@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <unistd.h>
 
-char empty_buffer[128];
+char empty_buffer[64];
 bool text_input_initialized = false;
 Uint32 registered_event_type;
 SDL_Event start_text_edit;
@@ -29,10 +29,10 @@ Uint32 fill_type;
 TextEditData *current_textbox_buffer;
 
 // swww arguments
-char duration_buffer[128];
-char angle_buffer[128];
-char fps_buffer[128];
-char steps_buffer[128];
+char duration_buffer[4];
+char angle_buffer[4];
+char fps_buffer[4];
+char steps_buffer[4];
 
 char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
                             "left", "right",  "top",    "bottom", "wave",
@@ -179,7 +179,7 @@ void updateImg(int rendered_images, int image_list) {
                            "--transition-type",
                            transition_types[transition_type],
                            "--transition-step",
-                           SDL_strlen(steps_buffer) ? steps_buffer : "255",
+                           SDL_strlen(steps_buffer) ? steps_buffer : "90",
                            "--transition-angle",
                            SDL_strlen(angle_buffer) ? angle_buffer : "30",
                            "--transition-duration",
