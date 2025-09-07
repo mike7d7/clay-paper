@@ -43,6 +43,7 @@ extern const char *transition_types[];
 extern const char *fill_types[];
 extern Uint32 transition_type;
 extern Uint32 fill_type;
+extern TextEditData *current_textbox_buffer;
 
 // swww arguments
 extern char duration[];

@@ -26,6 +26,7 @@ Uint32 *rendered_to_list;
 Uint32 shown_images;
 Uint32 transition_type;
 Uint32 fill_type;
+TextEditData *current_textbox_buffer;
 
 // swww arguments
 char duration_buffer[128];

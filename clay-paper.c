@@ -32,7 +32,6 @@ typedef struct app_state {
   SDL_Window *window;
   Clay_SDL3RendererData rendererData;
 } AppState;
-TextEditData *current_textbox_buffer;
 
 static inline Clay_Dimensions SDL_MeasureText(Clay_StringSlice text,
                                               Clay_TextElementConfig *config,

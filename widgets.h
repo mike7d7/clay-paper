@@ -49,6 +49,7 @@ void TextEditComponent(Clay_String id, TextEditData *data, float width) {
   }
   const Clay_BorderWidth border_text_active = {3, 3, 3, 3};
   const Clay_BorderWidth border_text_inactive = {0, 0, 0, 0};
+  bool is_active = current_textbox_buffer == data && editing_text;
 
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {10, 10, 6, 6},
@@ -59,10 +60,10 @@ void TextEditComponent(Clay_String id, TextEditData *data, float width) {
         .cornerRadius = CLAY_CORNER_RADIUS(12),
         .clip = {.horizontal = true, .childOffset = Clay_GetScrollOffset()},
         .border = {.width =
-                       editing_text ? border_text_active : border_text_inactive,
+                       is_active ? border_text_active : border_text_inactive,
                    .color = COLOR_TEXTEDIT_ACTIVE}}) {
     Clay_OnHover(HandleTextEditInteraction, (intptr_t)data);
-    if (editing_text && text.length == 0) {
+    if (is_active && text.length == 0) {
       CLAY({.layout.padding = {0, 0, 0, 0}}) {
         CLAY({
             .layout = {.sizing = {.height = CLAY_SIZING_FIXED(20),
@@ -79,7 +80,7 @@ void TextEditComponent(Clay_String id, TextEditData *data, float width) {
                           .fontSize = 16,
                           .fontId = 0}));
     // Caret
-    if (editing_text && text.length > 0) {
+    if (is_active && text.length > 0) {
       CLAY({.layout.padding = {0, 0, 0, 0}}) {
         CLAY({
             .layout = {.sizing = {.height = CLAY_SIZING_FIXED(20),
