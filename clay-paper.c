@@ -310,7 +310,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     load_images(state);
     break;
   case SDL_EVENT_TEXT_INPUT:
-    strcat(current_textbox_buffer->textToEdit, event->text.text);
+    if (SDL_strlen(current_textbox_buffer->textToEdit) + 1 <
+        current_textbox_buffer->maxLength) {
+      strcat(current_textbox_buffer->textToEdit, event->text.text);
+    }
     break;
   case SDL_EVENT_KEY_DOWN:
     if (editing_text) {
