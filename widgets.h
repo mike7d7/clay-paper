@@ -3,6 +3,7 @@
 #include "clay.h"
 #include "widget_functions.h"
 #include <SDL3/SDL.h>
+#include <string.h>
 
 const int FONT_ID_BODY_16 = 0;
 const Clay_Color COLOR_WHITE = {255, 255, 255, 255};
@@ -16,7 +17,6 @@ const Clay_Color COLOR_TRANSPARENT = {0, 0, 0, 0};
 const Clay_BorderElementConfig image_border = {.color = COLOR_TEXTEDIT_ACTIVE,
                                                .width = {8, 8, 8, 8}};
 const Clay_BorderElementConfig image_no_border = {.width = {0, 0, 0, 0}};
-#define TOP_WIDTH 400
 
 void HeaderButton(Clay_String id, Clay_String text, void *on_click_function) {
   CLAY({.id = CLAY_SID(id),
@@ -34,7 +34,7 @@ void HorizontalSpacer() {
   CLAY({.layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_GROW(0)}}});
 }
 
-void TextEditComponent(Clay_String id, TextEditData *data) {
+void TextEditComponent(Clay_String id, TextEditData *data, float width) {
   Clay_String text = (Clay_String){.length = strlen(data->textToEdit),
                                    .chars = data->textToEdit};
 
@@ -49,20 +49,21 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
   }
   const Clay_BorderWidth border_text_active = {3, 3, 3, 3};
   const Clay_BorderWidth border_text_inactive = {0, 0, 0, 0};
+  bool is_active = current_textbox_buffer == data && editing_text;
 
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {10, 10, 6, 6},
                    .childAlignment = {.y = CLAY_ALIGN_Y_CENTER},
-                   .sizing = {.width = CLAY_SIZING_FIXED(TOP_WIDTH / 2.0f)}},
+                   .sizing = {.width = CLAY_SIZING_FIXED(width)}},
         .backgroundColor =
             Clay_Hovered() ? COLOR_TEXTEDIT_HOVERED : COLOR_TEXTEDIT_NORMAL,
         .cornerRadius = CLAY_CORNER_RADIUS(12),
         .clip = {.horizontal = true, .childOffset = Clay_GetScrollOffset()},
         .border = {.width =
-                       editing_text ? border_text_active : border_text_inactive,
+                       is_active ? border_text_active : border_text_inactive,
                    .color = COLOR_TEXTEDIT_ACTIVE}}) {
-    Clay_OnHover(HandleTextEditInteraction, 0);
-    if (editing_text && text.length == 0) {
+    Clay_OnHover(HandleTextEditInteraction, (intptr_t)data);
+    if (is_active && text.length == 0) {
       CLAY({.layout.padding = {0, 0, 0, 0}}) {
         CLAY({
             .layout = {.sizing = {.height = CLAY_SIZING_FIXED(20),
@@ -79,7 +80,7 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
                           .fontSize = 16,
                           .fontId = 0}));
     // Caret
-    if (editing_text && text.length > 0) {
+    if (is_active && text.length > 0) {
       CLAY({.layout.padding = {0, 0, 0, 0}}) {
         CLAY({
             .layout = {.sizing = {.height = CLAY_SIZING_FIXED(20),
@@ -93,7 +94,8 @@ void TextEditComponent(Clay_String id, TextEditData *data) {
 
 void DropDownButton(Clay_String id, Clay_String text,
                     Clay_String *dropdown_elements, Uint32 number_of_elements,
-                    Uint32 id_offset /*should be !=0*/) {
+                    Uint32 id_offset /*should be !=0*/, Uint32 selected_option,
+                    void *onHoverFunction) {
   // HeaderButton
   CLAY({.id = CLAY_SID(id),
         .layout = {.padding = {10, 10, 6, 6}},
@@ -114,17 +116,22 @@ void DropDownButton(Clay_String id, Clay_String text,
           .backgroundColor = {40, 40, 40, 255},
           .cornerRadius = CLAY_CORNER_RADIUS(12),
           .floating = {.attachTo = CLAY_ATTACH_TO_PARENT,
-                       .attachPoints = {.element = CLAY_ATTACH_POINT_LEFT_TOP,
-                                        .parent =
-                                            CLAY_ATTACH_POINT_LEFT_BOTTOM}},
+                       .attachPoints = {.element =
+                                            CLAY_ATTACH_POINT_LEFT_BOTTOM,
+                                        .parent = CLAY_ATTACH_POINT_LEFT_TOP}},
       }) {
         for (int i = 0; i < number_of_elements; i++) {
+          Clay_Color text_color = COLOR_WHITE;
+          if (i == selected_option) {
+            text_color = COLOR_CATPPUCCIN_GREEN;
+          }
           CLAY({.id = CLAY_SID(dropdown_elements[i]),
                 .layout = {.padding = {0, 0, 6, 6}}}) {
+            Clay_OnHover(onHoverFunction, i);
             CLAY_TEXT(dropdown_elements[i],
                       CLAY_TEXT_CONFIG({.fontId = FONT_ID_BODY_16,
                                         .fontSize = 16,
-                                        .textColor = {255, 255, 255, 255}}));
+                                        .textColor = text_color}));
           };
         }
       };
@@ -202,7 +209,7 @@ void HeaderBar() {
   }) {
     HeaderButton(CLAY_STRING("Folder"), CLAY_STRING("Folder"), HandleFolder);
     HorizontalSpacer();
-    TextEditComponent(CLAY_STRING("search"), &default_data);
+    TextEditComponent(CLAY_STRING("search"), &default_data, 200.0f);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Clear"), CLAY_STRING("Clear"), HandleClearButton);
     HorizontalSpacer();
@@ -218,6 +225,49 @@ void HeaderBar() {
                            options_arr, 5, HandleOptionsButton);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Exit"), CLAY_STRING("Exit"), HandleExitButton);
+  };
+}
+
+void Footer() {
+  int fill_types_length = 4;
+  int transition_types_length = 14;
+  Clay_String clay_str_transition_types[] = {
+      CLAY_STRING("any"),   CLAY_STRING("none"),  CLAY_STRING("simple"),
+      CLAY_STRING("fade"),  CLAY_STRING("wipe"),  CLAY_STRING("left"),
+      CLAY_STRING("right"), CLAY_STRING("top"),   CLAY_STRING("bottom"),
+      CLAY_STRING("wave"),  CLAY_STRING("grow"),  CLAY_STRING("center"),
+      CLAY_STRING("outer"), CLAY_STRING("random")};
+
+  Clay_String clay_str_fill_types[] = {CLAY_STRING("no"), CLAY_STRING("crop"),
+                                       CLAY_STRING("fit"),
+                                       CLAY_STRING("stretch")};
+
+  CLAY({
+      .id = CLAY_ID("footer"),
+      .layout =
+          {
+              .sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIT(0)},
+              .childAlignment = {.y = CLAY_ALIGN_Y_CENTER,
+                                 .x = CLAY_ALIGN_X_CENTER},
+          },
+      .backgroundColor = COLOR_TRANSPARENT,
+  }) {
+    DropDownButton(CLAY_STRING("FillTypes"), CLAY_STRING("Fill Type"),
+                   clay_str_fill_types, fill_types_length, 1, fill_type,
+                   HandleFillTypes);
+    HorizontalSpacer();
+    TextEditComponent(CLAY_STRING("duration"), &duration_data, 100.0f);
+    HorizontalSpacer();
+    TextEditComponent(CLAY_STRING("angle"), &angle_data, 100.0f);
+    HorizontalSpacer();
+    TextEditComponent(CLAY_STRING("fps"), &fps_data, 100.0f);
+    HorizontalSpacer();
+    TextEditComponent(CLAY_STRING("steps"), &steps_data, 100.0f);
+    HorizontalSpacer();
+    DropDownButton(CLAY_STRING("TransitionTypes"),
+                   CLAY_STRING("Transition Type"), clay_str_transition_types,
+                   transition_types_length, 2, transition_type,
+                   HandleTransitionTypes);
   };
 }
 

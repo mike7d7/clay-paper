@@ -25,6 +25,10 @@ typedef struct {
 // terminator).
 extern char empty_buffer[];
 extern TextEditData default_data;
+extern TextEditData duration_data;
+extern TextEditData angle_data;
+extern TextEditData fps_data;
+extern TextEditData steps_data;
 extern bool editing_text;
 extern Uint32 config_options;
 extern Uint32 number_of_images;
@@ -35,6 +39,17 @@ extern Uint32 non_hidden_imgs;
 extern char *cache_path;
 extern Uint32 *rendered_to_list;
 extern Uint32 shown_images;
+extern char *transition_types[];
+extern char *fill_types[];
+extern Uint32 transition_type;
+extern Uint32 fill_type;
+extern TextEditData *current_textbox_buffer;
+
+// swww arguments
+extern char duration_buffer[];
+extern char angle_buffer[];
+extern char fps_buffer[];
+extern char steps_buffer[];
 
 void InitializeCustomEvents();
 void HandleTextEditInteraction(Clay_ElementId elementId,
@@ -50,4 +65,8 @@ void HandleImgClick(Clay_ElementId id, Clay_PointerData pointer_data,
 void HandleFolder(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleRefresh(Clay_ElementId id, Clay_PointerData pointer_data);
 void HandleRandom(Clay_ElementId id, Clay_PointerData pointer_data);
+void HandleFillTypes(Clay_ElementId id, Clay_PointerData pointer_data,
+                         int selected_index);
+void HandleTransitionTypes(Clay_ElementId id, Clay_PointerData pointer_data,
+                         int selected_index);
 char *jf_concat(size_t n, ...);

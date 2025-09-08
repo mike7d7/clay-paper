@@ -67,11 +67,7 @@ Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture *img) {
         .backgroundColor = COLOR_BACKGROUND}) {
     HeaderBar();
     ImageGrid(img);
-    CLAY({
-        .id = CLAY_ID("footer"),
-        .layout = {.sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIXED(60)}},
-        .backgroundColor = COLOR_ELEMENT_BACKGROUND,
-    });
+    Footer();
   };
 
   return Clay_EndLayout();
@@ -269,7 +265,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   SDL_AppResult ret_val = SDL_APP_CONTINUE;
   Clay_ScrollContainerData scroll_data =
       Clay_GetScrollContainerData(CLAY_ID("image_grid"));
-
   switch (event->type) {
   case SDL_EVENT_QUIT:
     ret_val = SDL_APP_SUCCESS;
@@ -300,6 +295,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     SDL_StartTextInput(state->window);
     SDL_SetTextInputArea(state->window, event->user.data1, 0);
     editing_text = true;
+    current_textbox_buffer = event->user.data2;
     SDL_free(event->user.data1);
     break;
   case SDL_EVENT_USER + 1: // end_text_edit
@@ -314,7 +310,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     load_images(state);
     break;
   case SDL_EVENT_TEXT_INPUT:
-    strcat(empty_buffer, event->text.text);
+    if (SDL_strlen(current_textbox_buffer->textToEdit) + 1 <
+        current_textbox_buffer->maxLength) {
+      strcat(current_textbox_buffer->textToEdit, event->text.text);
+    }
     break;
   case SDL_EVENT_KEY_DOWN:
     if (editing_text) {
@@ -324,9 +323,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         editing_text = false;
       }
       if (event->key.key == SDLK_BACKSPACE) {
-        int length = strlen(empty_buffer);
+        int length = strlen(current_textbox_buffer->textToEdit);
         if (length > 0) {
-          empty_buffer[length - 1] = '\0';
+          current_textbox_buffer->textToEdit[length - 1] = '\0';
         }
       }
     } else {
