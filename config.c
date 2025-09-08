@@ -17,6 +17,15 @@ void load_config() {
   Uint32 folder_path_length;
 
   if (SDL_ReadStorageFile(config_file, "config", buffer, filesize)) {
+    // arguments
+    SDL_memcpy(&duration_buffer, buffer_ptr, duration_data.maxLength);
+    buffer_ptr += duration_data.maxLength;
+    SDL_memcpy(&angle_buffer, buffer_ptr, angle_data.maxLength);
+    buffer_ptr += angle_data.maxLength;
+    SDL_memcpy(&fps_buffer, buffer_ptr, fps_data.maxLength);
+    buffer_ptr += fps_data.maxLength;
+    SDL_memcpy(&steps_buffer, buffer_ptr, steps_data.maxLength);
+    buffer_ptr += steps_data.maxLength;
     // fill_type
     SDL_memcpy(&fill_type, buffer_ptr, sizeof(Uint32));
     buffer_ptr += sizeof(Uint32);
@@ -59,6 +68,10 @@ void load_config() {
                  "Couldn't load from config file, probably because this is a "
                  "first time run: %s",
                  SDL_GetError());
+    SDL_strlcpy(duration_buffer, "", duration_data.maxLength);
+    SDL_strlcpy(angle_buffer, "", angle_data.maxLength);
+    SDL_strlcpy(fps_buffer, "", fps_data.maxLength);
+    SDL_strlcpy(steps_buffer, "", steps_data.maxLength);
     fill_type = 1;
     transition_type = 1;
     config_options = 1;
@@ -75,6 +88,8 @@ void load_config() {
 
 void write_config() {
   SDL_Storage *config_file = SDL_OpenUserStorage("mike7d7", "clay-paper", 0);
+  Uint32 arguments_size =
+      duration_data.maxLength * 4; // all args are the same size
   Uint32 ints_size = sizeof(Uint32) * 5;
   Uint32 rendered_to_list_size = number_of_images * sizeof(Uint32);
   Uint32 folder_path_length =
@@ -85,11 +100,20 @@ void write_config() {
     files_size += sizeof(Uint32);           // Current string length
     files_size += SDL_strlen(files[i]) + 1; // Current string + \0
   }
-  Uint32 buffer_size =
-      ints_size + folder_path_length + rendered_to_list_size + files_size;
+  Uint32 buffer_size = arguments_size + ints_size + folder_path_length +
+                       rendered_to_list_size + files_size;
   void *buffer = SDL_malloc(buffer_size);
 
   Uint8 *buffer_ptr = buffer;
+  // arguments
+  SDL_memcpy(buffer_ptr, &duration_buffer, duration_data.maxLength);
+  buffer_ptr += duration_data.maxLength;
+  SDL_memcpy(buffer_ptr, &angle_buffer, angle_data.maxLength);
+  buffer_ptr += angle_data.maxLength;
+  SDL_memcpy(buffer_ptr, &fps_buffer, fps_data.maxLength);
+  buffer_ptr += fps_data.maxLength;
+  SDL_memcpy(buffer_ptr, &steps_buffer, steps_data.maxLength);
+  buffer_ptr += steps_data.maxLength;
   // fill_type
   SDL_memcpy(buffer_ptr, &fill_type, sizeof(Uint32));
   buffer_ptr += sizeof(Uint32);
