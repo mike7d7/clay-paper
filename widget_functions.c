@@ -1,12 +1,13 @@
 #include "widget_functions.h"
 #include "SDL3/SDL_events.h"
+#include "SDL3/SDL_log.h"
 #include "SDL3/SDL_stdinc.h"
 #include "clay.h"
 #include <SDL3/SDL.h>
 #include <stdint.h>
 #include <unistd.h>
 
-char empty_buffer[128];
+char empty_buffer[64];
 bool text_input_initialized = false;
 Uint32 registered_event_type;
 SDL_Event start_text_edit;
@@ -23,6 +24,20 @@ char *cache_path;
 Uint32 non_hidden_imgs = 0;
 Uint32 *rendered_to_list;
 Uint32 shown_images;
+Uint32 transition_type;
+Uint32 fill_type;
+TextEditData *current_textbox_buffer;
+
+// swww arguments
+char duration_buffer[4];
+char angle_buffer[4];
+char fps_buffer[4];
+char steps_buffer[4];
+
+char *transition_types[] = {"any",  "none",   "simple", "fade",   "wipe",
+                            "left", "right",  "top",    "bottom", "wave",
+                            "grow", "center", "outer",  "random"};
+char *fill_types[] = {"no", "crop", "fit", "stretch"};
 
 TextEditData default_data = (TextEditData){
     .hintText = CLAY_STRING("Search"),
@@ -30,7 +45,30 @@ TextEditData default_data = (TextEditData){
     .isPassword = false,
     .maxLength = sizeof(empty_buffer),
 };
-
+TextEditData duration_data = (TextEditData){
+    .hintText = CLAY_STRING("Duration"),
+    .textToEdit = duration_buffer,
+    .isPassword = false,
+    .maxLength = sizeof(duration_buffer),
+};
+TextEditData angle_data = (TextEditData){
+    .hintText = CLAY_STRING("Angle"),
+    .textToEdit = angle_buffer,
+    .isPassword = false,
+    .maxLength = sizeof(angle_buffer),
+};
+TextEditData fps_data = (TextEditData){
+    .hintText = CLAY_STRING("FPS"),
+    .textToEdit = fps_buffer,
+    .isPassword = false,
+    .maxLength = sizeof(fps_buffer),
+};
+TextEditData steps_data = (TextEditData){
+    .hintText = CLAY_STRING("Steps"),
+    .textToEdit = steps_buffer,
+    .isPassword = false,
+    .maxLength = sizeof(steps_buffer),
+};
 // Copied from jftui with minor modifications made.
 // https://github.com/Aanok/jftui/blob/master/src/shared.c
 char *jf_concat(size_t n, ...) {
@@ -94,6 +132,7 @@ void HandleTextEditInteraction(Clay_ElementId id, Clay_PointerData pointer_data,
     };
     if (registered_event_type != 0) {
       start_text_edit.user.data1 = element_area;
+      start_text_edit.user.data2 = (void *)userData;
       SDL_PushEvent(&start_text_edit);
     }
   }
@@ -132,13 +171,22 @@ void HandleOptionsButton(Clay_ElementId id, Clay_PointerData pointer_data,
 void updateImg(int rendered_images, int image_list) {
   selected_image = rendered_images;
   char *img_path = jf_concat(3, folder_path, "/", files[image_list]);
-  char *argument_list[] = {"swww",   "img",
-                           img_path, "--transition-type",
-                           "wipe",   "--transition-step",
-                           "255",    "--transition-angle",
-                           "30",     "--transition-duration",
-                           "2",      "--transition-fps",
-                           "240",    NULL};
+  char *argument_list[] = {"swww",
+                           "img",
+                           img_path,
+                           "--resize",
+                           fill_types[fill_type],
+                           "--transition-type",
+                           transition_types[transition_type],
+                           "--transition-step",
+                           SDL_strlen(steps_buffer) ? steps_buffer : "90",
+                           "--transition-angle",
+                           SDL_strlen(angle_buffer) ? angle_buffer : "30",
+                           "--transition-duration",
+                           SDL_strlen(duration_buffer) ? duration_buffer : "2",
+                           "--transition-fps",
+                           SDL_strlen(fps_buffer) ? fps_buffer : "120",
+                           NULL};
 
   if (fork() == 0) {
     execvp("swww", argument_list);
@@ -188,5 +236,23 @@ void HandleRandom(Clay_ElementId id, Clay_PointerData pointer_data) {
       scroll_data.scrollPosition->y = 0;
       scroll_data.scrollPosition->y -= new_scroll_data;
     }
+  }
+}
+
+void HandleFillTypes(Clay_ElementId id, Clay_PointerData pointer_data,
+                     int selected_index) {
+
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    fill_type = selected_index;
+    SDL_Log("selected fill type = %s", fill_types[selected_index]);
+  }
+}
+
+void HandleTransitionTypes(Clay_ElementId id, Clay_PointerData pointer_data,
+                           int selected_index) {
+
+  if (pointer_data.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME) {
+    transition_type = selected_index;
+    SDL_Log("selected fill type = %s", transition_types[selected_index]);
   }
 }
