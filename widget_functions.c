@@ -187,6 +187,12 @@ void updateImg(int rendered_images, int image_list) {
                            "--transition-fps",
                            SDL_strlen(fps_buffer) ? fps_buffer : "120",
                            NULL};
+  if (config_options & USE_MATUGEN) {
+    if (fork() == 0) {
+      char *matugen_args[] = {"matugen", "image", img_path, NULL};
+      execvp("matugen", matugen_args);
+    }
+  }
 
   if (fork() == 0) {
     execvp("swww", argument_list);

@@ -220,9 +220,9 @@ void HeaderBar() {
     Clay_String options_arr[] = {
         CLAY_STRING("Show GIFs only"), CLAY_STRING("Show subfolders"),
         CLAY_STRING("Show all subfolders"), CLAY_STRING("Show hidden"),
-        CLAY_STRING("Show path in tooltip")};
+        CLAY_STRING("Show path in tooltip"), CLAY_STRING("Use Matugen for colors")};
     DropDownCheckBoxButton(CLAY_STRING("Options"), CLAY_STRING("Options"),
-                           options_arr, 5, HandleOptionsButton);
+                           options_arr, 6, HandleOptionsButton);
     HorizontalSpacer();
     HeaderButton(CLAY_STRING("Exit"), CLAY_STRING("Exit"), HandleExitButton);
   };

@@ -7,6 +7,7 @@
 #define SHOW_ALL_SUBFOLDERS (1 << 2)
 #define SHOW_HIDDEN (1 << 3)
 #define SHOW_PATH_IN_TOOLTIP (1 << 4)
+#define USE_MATUGEN (1 << 5)
 
 typedef struct {
   Clay_String hintText;
