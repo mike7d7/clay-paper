@@ -139,7 +139,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   }
   *appstate = state;
 
-  if (!SDL_CreateWindowAndRenderer("Clay Demo", 800, 600, SDL_WINDOW_RESIZABLE,
+  if (!SDL_CreateWindowAndRenderer("Clay Demo", 800, 543, SDL_WINDOW_RESIZABLE,
                                    &state->window,
                                    &state->rendererData.renderer)) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR,

@@ -249,6 +249,7 @@ void Footer() {
               .sizing = {CLAY_SIZING_GROW(0), CLAY_SIZING_FIT(0)},
               .childAlignment = {.y = CLAY_ALIGN_Y_CENTER,
                                  .x = CLAY_ALIGN_X_CENTER},
+              .padding = {0, 0, 0, 0},
           },
       .backgroundColor = COLOR_TRANSPARENT,
   }) {
