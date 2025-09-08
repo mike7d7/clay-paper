@@ -50,7 +50,7 @@ static inline Clay_Dimensions SDL_MeasureText(Clay_StringSlice text,
 }
 
 void HandleClayErrors(Clay_ErrorData errorData) {
-  printf("%s", errorData.errorText.chars);
+  SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "%s", errorData.errorText.chars);
 }
 
 Clay_RenderCommandArray ClayImageSample_CreateLayout(SDL_Texture *img) {
@@ -219,7 +219,7 @@ void load_images(AppState *state) {
         non_hidden_imgs++;
       }
       char *img_path = jf_concat(3, folder_path, "/", files[i]);
-      printf("%s\n", img_path);
+      SDL_LogDebug(SDL_LOG_PRIORITY_DEBUG, "%s\n", img_path);
       img[i] = IMG_LoadTexture(state->rendererData.renderer, img_path);
       SDL_free(img_path);
     }
