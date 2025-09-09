@@ -7,6 +7,7 @@
 #include "SDL3/SDL_scancode.h"
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3/SDL_surface.h"
+#include "SDL3/SDL_video.h"
 #include "SDL3_image/SDL_image.h"
 #include <string.h>
 #define SDL_MAIN_USE_CALLBACKS
@@ -184,7 +185,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
                                        .capacity = totalMemorySize};
 
   int width, height;
-  SDL_GetWindowSize(state->window, &width, &height);
+  SDL_GetWindowSizeInPixels(state->window, &width, &height);
   Clay_Initialize(clayMemory, (Clay_Dimensions){(float)width, (float)height},
                   (Clay_ErrorHandler){HandleClayErrors});
   Clay_SetMeasureTextFunction(SDL_MeasureText, state->rendererData.fonts);
